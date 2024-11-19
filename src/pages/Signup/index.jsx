@@ -17,9 +17,7 @@ const Signup = () => {
       <Layout>
         <Top />
 
-        <main className="flex-grow flex items-center justify-center">
-          <SignupForm />
-        </main>
+        <SignupForm />
 
         <Footer />
       </Layout>
