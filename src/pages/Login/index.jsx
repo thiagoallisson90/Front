@@ -16,9 +16,7 @@ const Login = () => {
       <Layout>
         <Top />
 
-        <main className="flex-grow flex items-center justify-center">
-          <LoginForm />
-        </main>
+        <LoginForm />
 
         <Footer />
       </Layout>
