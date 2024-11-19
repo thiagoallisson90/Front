@@ -11,11 +11,14 @@ const MyRoutes = () => {
       }}
     >
       <Routes>
+        {/* Login */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
 
+        {/* Signup */}
         <Route path="/signup" element={<Signup />} />
 
+        {/* RecoverPass */}
         <Route path="/recover" element={<RecoverPass />}></Route>
       </Routes>
     </BrowserRouter>
