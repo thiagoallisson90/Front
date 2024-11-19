@@ -10,7 +10,7 @@ const Signup = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>LittAMI - Sign up</title>
+          <title>OptimusLoRa - Sign up</title>
         </Helmet>
       </HelmetProvider>
 

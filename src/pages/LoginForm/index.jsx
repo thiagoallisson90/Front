@@ -59,7 +59,7 @@ const LoginForm = () => {
 
             <div className="mb-4 text-center text-sm">
               <Link
-                to="/"
+                to="/recover"
                 className="underline text-blue-500 hover:text-blue-700"
               >
                 {`Forgot the password?`}

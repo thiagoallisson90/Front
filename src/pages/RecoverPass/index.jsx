@@ -1,24 +1,22 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import LoginForm from "../LoginForm";
-import Layout from "../Layout";
-import Top from "../Top";
 import Footer from "../Footer";
+import Layout from "../Layout";
+import RecoverForm from "../RecoverForm";
+import Top from "../Top";
 
-const Login = () => {
+const RecoverPass = () => {
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>OptimusLoRa - Login</title>
+          <title>OptimusLoRa - Recover</title>
         </Helmet>
       </HelmetProvider>
 
       <Layout>
         <Top />
 
-        <main className="flex-grow flex items-center justify-center">
-          <LoginForm />
-        </main>
+        <RecoverForm />
 
         <Footer />
       </Layout>
@@ -26,4 +24,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default RecoverPass;
