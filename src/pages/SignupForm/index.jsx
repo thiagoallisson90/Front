@@ -8,7 +8,7 @@ function SignupForm() {
             Sign Up
           </h2>
           <form action="#" method="POST">
-            {/* Nome Completo */}
+            {/* Full Name */}
             <div className="mb-4">
               <label
                 htmlFor="full-name"
@@ -44,7 +44,7 @@ function SignupForm() {
               />
             </div>
 
-            {/* Senha */}
+            {/* Password */}
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -62,7 +62,7 @@ function SignupForm() {
               />
             </div>
 
-            {/* Confirmar Senha */}
+            {/* Confirm Pass */}
             <div className="mb-6">
               <label
                 htmlFor="confirm-password"
@@ -80,7 +80,7 @@ function SignupForm() {
               />
             </div>
 
-            {/* Botão de Enviar */}
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
