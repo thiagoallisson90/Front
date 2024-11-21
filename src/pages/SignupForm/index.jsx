@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import baseUrl from "../../services/api";
+import { auth } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
@@ -15,22 +15,19 @@ function SignupForm() {
   });
 
   const onSubmit = async (dataForm) => {
-    dataForm["userType"] = "1";
+    try {
+      dataForm["userType"] = "1";
 
-    await fetch(`${baseUrl}/api/v1/auth/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataForm),
-    });
+      const response = await auth(dataForm);
+      if (response.ok) {
+        resetField("name");
+        resetField("email");
+        resetField("password");
+        resetField("confirmPassword");
 
-    resetField("name");
-    resetField("email");
-    resetField("password");
-    resetField("confirmPassword");
-
-    navigate("/");
+        navigate("/");
+      }
+    } catch (error) {}
   };
 
   const validatePass = (value) => {

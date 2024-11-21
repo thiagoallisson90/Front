@@ -1,6 +1,25 @@
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { login } from "../../services/api";
 
 const LoginForm = () => {
+  const { register, handleSubmit, resetField } = useForm();
+
+  const onSubmit = async (dataForm) => {
+    try {
+      const response = await login(dataForm);
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("authToken", data.token);
+
+        resetField("email");
+        resetField("password");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <>
       <main className="flex-grow flex items-center justify-center">
@@ -9,7 +28,7 @@ const LoginForm = () => {
             Login
           </h2>
 
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit(onSubmit)}>
             {/* Email */}
             <div className="mb-4">
               <label
@@ -25,6 +44,7 @@ const LoginForm = () => {
                 className="mt-1 p-1 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="john@example.com"
                 required
+                {...register("email")}
               />
             </div>
 
@@ -41,8 +61,10 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 className="mt-1 p-1 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="••••••••"
+                placeholder="********"
                 required
+                minLength={8}
+                {...register("password")}
               />
             </div>
 
