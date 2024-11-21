@@ -1,8 +1,15 @@
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 const PageError = () => {
   return (
     <>
+      <HelmetProvider>
+        <Helmet>
+          <title>OptimusLoRa - 404</title>
+        </Helmet>
+      </HelmetProvider>
+
       <section className="bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">

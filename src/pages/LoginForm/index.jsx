@@ -8,6 +8,7 @@ const LoginForm = () => {
   const { register, handleSubmit, resetField } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
+  const ok = location.state?.ok;
 
   const [open, setOpen] = useState(false);
 
@@ -45,7 +46,7 @@ const LoginForm = () => {
     <>
       <Snackbar open={open} autoHideDuration={8000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" className="text-sm">
-          Registration completed sucessfully!
+          {ok}
         </Alert>
       </Snackbar>
 

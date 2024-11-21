@@ -29,7 +29,7 @@ function SignupForm() {
 
         navigate("/", {
           state: {
-            ok: true,
+            ok: "Registration completed successfully!",
           },
         });
       }
