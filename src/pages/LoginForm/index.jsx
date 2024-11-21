@@ -1,9 +1,25 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { login } from "../../services/api";
+import { Snackbar, Alert } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const LoginForm = () => {
   const { register, handleSubmit, resetField } = useForm();
+  const location = useLocation();
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.ok && !localStorage.getItem("alertShown")) {
+      setOpen(true);
+      localStorage.setItem("alertShown", true);
+    }
+  }, [location.state]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const onSubmit = async (dataForm) => {
     try {
@@ -24,6 +40,12 @@ const LoginForm = () => {
 
   return (
     <>
+      <Snackbar open={open} autoHideDuration={8000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" className="text-sm">
+          Registration completed sucessfully!
+        </Alert>
+      </Snackbar>
+
       <main className="flex-grow flex items-center justify-center">
         <div className="bg-white shadow-md rounded px-8 py-6 w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">

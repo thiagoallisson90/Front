@@ -25,7 +25,13 @@ function SignupForm() {
         resetField("password");
         resetField("confirmPassword");
 
-        navigate("/");
+        localStorage.removeItem("alertShown");
+
+        navigate("/", {
+          state: {
+            ok: true,
+          },
+        });
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
