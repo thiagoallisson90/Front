@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { login } from "../../services/api";
 
 const LoginForm = () => {
-  console.log(import.meta.env);
   const { register, handleSubmit, resetField } = useForm();
 
   const onSubmit = async (dataForm) => {
