@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../services/api";
 import { Snackbar, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const LoginForm = () => {
   const { register, handleSubmit, resetField } = useForm();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
 
@@ -30,6 +31,8 @@ const LoginForm = () => {
 
         resetField("email");
         resetField("password");
+
+        navigate("/main");
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
