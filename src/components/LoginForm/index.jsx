@@ -33,7 +33,7 @@ const LoginForm = () => {
         resetField("email");
         resetField("password");
 
-        navigate("/main");
+        navigate("/home");
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
