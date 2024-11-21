@@ -1,4 +1,7 @@
-const baseUrl = "http://localhost:3124";
+const baseUrl =
+  import.meta.env.VITE_REACT_ENV == "development"
+    ? import.meta.env.VITE_API_URL_DEV
+    : import.meta.env.VITE_API_URL_PROD;
 
 const auth = async (dataForm) => {
   return await fetch(`${baseUrl}/api/v1/auth/signup`, {

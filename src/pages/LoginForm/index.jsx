@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { login } from "../../services/api";
 
 const LoginForm = () => {
+  console.log(import.meta.env);
   const { register, handleSubmit, resetField } = useForm();
 
   const onSubmit = async (dataForm) => {
@@ -16,7 +17,9 @@ const LoginForm = () => {
         resetField("password");
       }
     } catch (error) {
-      console.error(error.message);
+      if (import.meta.env.VITE_REACT_ENV == "development") {
+        console.error(error.message);
+      }
     }
   };
 

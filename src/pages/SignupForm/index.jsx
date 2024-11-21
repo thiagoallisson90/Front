@@ -27,7 +27,11 @@ function SignupForm() {
 
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) {
+      if (import.meta.env.VITE_REACT_ENV == "development") {
+        console.error(error);
+      }
+    }
   };
 
   const validatePass = (value) => {
