@@ -1,8 +1,8 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import LoginForm from "../LoginForm";
-import Layout from "../Layout";
-import Top from "../Top";
-import Footer from "../Footer";
+import LoginForm from "../../components/LoginForm";
+import Layout from "../../components/Layout";
+import Top from "../../components/Top";
+import Footer from "../../components/Footer";
 
 const Login = () => {
   return (

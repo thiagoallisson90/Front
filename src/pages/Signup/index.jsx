@@ -1,7 +1,7 @@
-import SignupForm from "../SignupForm";
-import Top from "../Top";
-import Footer from "../Footer";
-import Layout from "../Layout";
+import SignupForm from "../../components/SignupForm";
+import Top from "../../components/Top";
+import Footer from "../../components/Footer";
+import Layout from "../../components/Layout";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
 

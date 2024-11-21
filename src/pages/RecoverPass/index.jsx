@@ -1,8 +1,8 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import Footer from "../Footer";
-import Layout from "../Layout";
-import RecoverForm from "../RecoverForm";
-import Top from "../Top";
+import Footer from "../../components/Footer";
+import Layout from "../../components/Layout";
+import RecoverForm from "../../components/RecoverForm";
+import Top from "../../components/Top";
 
 const RecoverPass = () => {
   return (
