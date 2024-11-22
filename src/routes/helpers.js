@@ -1,9 +1,11 @@
-const key = "authToken";
+const keys = ["authToken", "username", "usertype"];
 
 export const isAuthenticated = () => {
-  return localStorage.getItem(key) !== null;
+  return localStorage.getItem(keys[0]) !== null;
 };
 
 export const closeAuth = () => {
-  localStorage.removeItem(key);
+  keys.forEach((key) => {
+    localStorage.removeItem(key);
+  });
 };
