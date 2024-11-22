@@ -1,17 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Logo from "../Logo";
-import { closeAuth } from "../../routes/helpers";
 import NavItem from "../NavItem";
+import ButtonLogout from "../ButtonLogout";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const onClickLogout = () => {
-    closeAuth();
-    navigate("/login");
-  };
 
   return (
     <nav className="bg-blue-700">
@@ -42,12 +35,7 @@ const NavBar = () => {
           <NavItem navigateTo={"/teams"}>Teams</NavItem>
           <NavItem navigateTo={"/profile"}>Profile</NavItem>
           <li>
-            <button
-              onClick={() => onClickLogout()}
-              className="text-gray-200 font-bold hover:text-white transition"
-            >
-              Logout
-            </button>
+            <ButtonLogout />
           </li>
         </ul>
       </div>
@@ -58,12 +46,7 @@ const NavBar = () => {
             <NavItem navigateTo={"/teams"}>Teams</NavItem>
             <NavItem navigateTo={"/profile"}>Profile</NavItem>
             <li>
-              <button
-                onClick={() => onClickLogout()}
-                className="block text-gray-200 font-bold hover:text-white transition"
-              >
-                Logout
-              </button>
+              <ButtonLogout />
             </li>
           </ul>
         </div>
