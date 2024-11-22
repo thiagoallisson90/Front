@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { FaEye, FaPlus } from "react-icons/fa";
+import ButtonPage from "../ButtonPage";
+import { useNavigate } from "react-router-dom";
 
 const DataGridP = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([
-    { id: 1, name: "Project Alpha", status: "Completed", duration: "2h 30m" },
-    { id: 2, name: "Project Beta", status: "In Progress", duration: "1h 15m" },
-    { id: 3, name: "Project Gamma", status: "Pending", duration: "N/A" },
-    { id: 4, name: "Project Delta", status: "Failed", duration: "45m" },
-    { id: 5, name: "Project Epsilon", status: "Completed", duration: "3h 20m" },
+    { id: 1, name: "Project AMI 1", status: "Completed", duration: "2h 30m" },
+    { id: 2, name: "Project AMI 2", status: "In Progress", duration: "1h 15m" },
+    { id: 3, name: "Project Mobility", status: "Pending", duration: "N/A" },
+    { id: 4, name: "Project Blockchain", status: "Failed", duration: "45m" },
+    {
+      id: 5,
+      name: "Project Smart Traps",
+      status: "Completed",
+      duration: "3h 20m",
+    },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +62,7 @@ const DataGridP = () => {
           </div>
           <button
             className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            onClick={() => alert("Add new project")}
+            onClick={() => navigate("/project/new")}
           >
             <FaPlus className="mr-2" /> Add
           </button>
@@ -85,7 +94,7 @@ const DataGridP = () => {
                   <td className="p-4">{item.duration}</td>
                   <td className="p-4 text-center">
                     <button
-                      onClick={() => alert(`Viewing details for ${item.name}`)}
+                      onClick={() => navigate(`/project/${item.id}`)}
                       className="text-blue-500 hover:text-blue-700 transition"
                     >
                       <FaEye />
@@ -97,18 +106,8 @@ const DataGridP = () => {
           </table>
         </div>
         <div className="flex justify-end mt-4 space-x-2">
-          <button
-            onClick={() => alert("Previous page")}
-            className="bg-gray-200 text-gray-800 font-bold px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => alert("Next page")}
-            className="bg-gray-200 text-gray-800 font-bold px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-          >
-            Next
-          </button>
+          <ButtonPage navigateTo={"/page/2"}>Previous</ButtonPage>
+          <ButtonPage navigateTo={"/page/1"}>Next</ButtonPage>
         </div>
       </div>
     </div>
