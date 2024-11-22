@@ -2,15 +2,18 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Top from "../../components/Top";
+import { siteName } from "../../components/Global";
 
 const About = () => {
-  const pageName = "About";
+  const name = "About";
 
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>OptimusLoRa - {pageName}</title>
+          <title>
+            {siteName} - {name}
+          </title>
         </Helmet>
       </HelmetProvider>
 
