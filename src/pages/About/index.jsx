@@ -4,7 +4,7 @@ import Layout from "../../components/Layout";
 import Top from "../../components/Top";
 import { siteName } from "../../components/Global";
 import { useNavigate } from "react-router-dom";
-import image from "../../../public/about-img.jpg";
+import imageAbout from "../../imgs/about_img.jpg";
 
 {
   /*src="https://pagedone.io/asset/uploads/1717751272.png"*/
@@ -63,7 +63,7 @@ const About = () => {
               </div>
               <img
                 className="lg:mx-0 mx-auto h-full rounded-3xl object-cover"
-                src={image}
+                src={imageAbout}
                 alt="about Us image"
               />
             </div>
