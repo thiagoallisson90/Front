@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Logo from "../Logo";
 import { closeAuth } from "../../routes/helpers";
 import NavItem from "../NavItem";
