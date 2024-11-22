@@ -99,13 +99,13 @@ const DataGridP = () => {
         <div className="flex justify-end mt-4 space-x-2">
           <button
             onClick={() => alert("Previous page")}
-            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+            className="bg-gray-200 text-gray-800 font-bold px-4 py-2 rounded-lg hover:bg-gray-300 transition"
           >
             Previous
           </button>
           <button
             onClick={() => alert("Next page")}
-            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+            className="bg-gray-200 text-gray-800 font-bold px-4 py-2 rounded-lg hover:bg-gray-300 transition"
           >
             Next
           </button>
