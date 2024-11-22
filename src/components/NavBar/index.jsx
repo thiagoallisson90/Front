@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
 import { closeAuth } from "../../routes/helpers";
+import NavItem from "../NavItem";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,30 +38,9 @@ const NavBar = () => {
           </svg>
         </button>
         <ul className="hidden md:flex space-x-8">
-          <li>
-            <Link
-              to="/projects"
-              className="text-gray-200 font-bold hover:text-white transition"
-            >
-              Projects
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/team"
-              className="text-gray-200 font-bold hover:text-white transition"
-            >
-              Team
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/profile"
-              className="text-gray-200 font-bold hover:text-white transition"
-            >
-              Profile
-            </Link>
-          </li>
+          <NavItem navigateTo={"/projects"}>Projects</NavItem>
+          <NavItem navigateTo={"/teams"}>Teams</NavItem>
+          <NavItem navigateTo={"/profile"}>Profile</NavItem>
           <li>
             <button
               onClick={() => onClickLogout()}
@@ -74,30 +54,9 @@ const NavBar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-blue-700">
           <ul className="flex flex-col space-y-2 p-4">
-            <li>
-              <Link
-                to="/projects"
-                className="block text-gray-200 font-bold hover:text-white transition"
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/team"
-                className="block text-gray-200 font-bold hover:text-white transition"
-              >
-                Team
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/profile"
-                className="block text-gray-200 font-bold hover:text-white transition"
-              >
-                Profile
-              </Link>
-            </li>
+            <NavItem navigateTo={"/projects"}>Projects</NavItem>
+            <NavItem navigateTo={"/teams"}>Teams</NavItem>
+            <NavItem navigateTo={"/profile"}>Profile</NavItem>
             <li>
               <button
                 onClick={() => onClickLogout()}
