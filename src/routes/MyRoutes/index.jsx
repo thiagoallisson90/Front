@@ -6,6 +6,7 @@ import Home from "../../pages/Home";
 import PageError from "../../pages/PageError";
 import PublicRoute from "../PublicRoute";
 import PrivateRoute from "../PrivateRoute";
+import About from "../../pages/About";
 
 const MyRoutes = () => {
   return (
@@ -53,6 +54,15 @@ const MyRoutes = () => {
           element={
             <PrivateRoute>
               <Home />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <PrivateRoute>
+              <About />
             </PrivateRoute>
           }
         />
