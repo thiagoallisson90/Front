@@ -7,7 +7,6 @@ import PageError from "../../pages/PageError";
 import PublicRoute from "../PublicRoute";
 import PrivateRoute from "../PrivateRoute";
 import About from "../../pages/About";
-import Index from "../../pages/Index";
 
 const MyRoutes = () => {
   return (
@@ -65,7 +64,6 @@ const MyRoutes = () => {
         />
 
         {/* Other Routes */}
-        <Route path="/index" element={<Index />} />
         <Route path="/about" element={<About />} />
 
         <Route path="*" element={<PageError />} />
