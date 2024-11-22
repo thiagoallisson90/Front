@@ -3,9 +3,20 @@ import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Top from "../../components/Top";
 import { siteName } from "../../components/Global";
+import { useNavigate } from "react-router-dom";
+import image from "../../../public/about-img.jpg";
+
+{
+  /*src="https://pagedone.io/asset/uploads/1717751272.png"*/
+}
 
 const About = () => {
   const name = "About";
+  const navigate = useNavigate();
+
+  const onClickGetStarted = () => {
+    navigate("/login");
+  };
 
   return (
     <>
@@ -28,18 +39,23 @@ const About = () => {
               <div className="w-full flex-col justify-start lg:items-start items-center gap-10 inline-flex">
                 <div className="w-full flex-col justify-start lg:items-start items-center gap-4 flex">
                   <h2 className="text-gray-900 text-4xl font-bold font-manrope leading-normal lg:text-start text-center">
-                    Building Stronger Communities through Collaboration and
-                    Empowerment
+                    OptimusLoRa is a tool that optimizes LoRaWAN communication
+                    infrastructure
                   </h2>
                   <p className="text-gray-500 text-base font-normal leading-relaxed lg:text-start text-center">
-                    Through collaborationperse perspectives and strengths are
-                    leveraged to create inclusive environments where everyone
-                    has the opportunity to thrive. This approach not only
-                    fosters personal growth and achievement but also strengthens
-                    the fabric of society.
+                    OptimusLoRa assists in determining the ideal number of
+                    gateways and configuring parameters for end devices, such as
+                    the Spreading Factor, to maximize network performance and
+                    efficiency. By leveraging cutting-edge algorithms,
+                    OptimusLoRa ensures robust connectivity, minimizes latency,
+                    and reduces deployment costs, making it an essential
+                    solution for IoT network planners and developers.
                   </p>
                 </div>
-                <button className="sm:w-fit w-full px-3.5 py-2 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 ease-in-out rounded-lg shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] justify-center items-center flex">
+                <button
+                  onClick={() => onClickGetStarted()}
+                  className="sm:w-fit w-full px-3.5 py-2 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 ease-in-out rounded-lg shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] justify-center items-center flex"
+                >
                   <span className="px-1.5 text-white text-sm font-medium leading-6">
                     Get Started
                   </span>
@@ -47,7 +63,7 @@ const About = () => {
               </div>
               <img
                 className="lg:mx-0 mx-auto h-full rounded-3xl object-cover"
-                src="https://pagedone.io/asset/uploads/1717751272.png"
+                src={image}
                 alt="about Us image"
               />
             </div>
