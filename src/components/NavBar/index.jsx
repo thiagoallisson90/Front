@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "../Logo";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -7,9 +8,7 @@ const NavBar = () => {
   return (
     <nav className="bg-blue-700">
       <div className="max-w-screen-xl mx-auto flex items-center justify-between p-4">
-        <Link to="/" className="text-white text-2xl font-bold">
-          <img src="../public/logo4.jpeg" className="w-44" />
-        </Link>
+        <Logo />
         <button
           className="text-gray-200 md:hidden hover:text-white"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
