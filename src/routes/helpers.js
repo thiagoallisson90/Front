@@ -1,3 +1,9 @@
+const key = "authToken";
+
 export const isAuthenticated = () => {
-  return localStorage.getItem("authToken") !== null;
+  return localStorage.getItem(key) !== null;
+};
+
+export const closeAuth = () => {
+  localStorage.removeItem(key);
 };
