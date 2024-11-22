@@ -1,9 +1,7 @@
 import { useState } from "react";
 import Logo from "../Logo";
-import NavItem from "../NavItem";
-import ButtonLogout from "../ButtonLogout";
 
-const NavBar = () => {
+const NavBar = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -30,25 +28,11 @@ const NavBar = () => {
             ></path>
           </svg>
         </button>
-        <ul className="hidden md:flex space-x-8">
-          <NavItem navigateTo={"/projects"}>Projects</NavItem>
-          <NavItem navigateTo={"/teams"}>Teams</NavItem>
-          <NavItem navigateTo={"/profile"}>Profile</NavItem>
-          <li>
-            <ButtonLogout />
-          </li>
-        </ul>
+        <ul className="hidden md:flex space-x-8">{children}</ul>
       </div>
       {isMenuOpen && (
         <div className="md:hidden bg-blue-700">
-          <ul className="flex flex-col space-y-2 p-4">
-            <NavItem navigateTo={"/projects"}>Projects</NavItem>
-            <NavItem navigateTo={"/teams"}>Teams</NavItem>
-            <NavItem navigateTo={"/profile"}>Profile</NavItem>
-            <li>
-              <ButtonLogout />
-            </li>
-          </ul>
+          <ul className="flex flex-col space-y-2 p-4">{children}</ul>
         </div>
       )}
     </nav>
