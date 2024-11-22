@@ -4,20 +4,10 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { siteName } from "../../components/Global";
 import ButtonLogout from "../../components/ButtonLogout";
 import NavItem from "../../components/NavItem";
-import { useEffect, useState } from "react";
+import Welcome from "../../components/Welcome/Index";
 
 const Home = () => {
   const name = "Home";
-  const [username, setUsername] = useState(localStorage.getItem("username"));
-
-  useEffect(() => {
-    const getFirstAndSecondNames = () => {
-      const names = username.split(" ");
-      setUsername(`${names[0]} ${names[1]}`);
-    };
-
-    getFirstAndSecondNames();
-  });
 
   return (
     <>
@@ -38,11 +28,7 @@ const Home = () => {
         </li>
       </NavBar>
 
-      {username && (
-        <div className="flex justify-end px-4 py-2 font-sans font-bold">
-          <p>{`Hi, ${username}!`}</p>
-        </div>
-      )}
+      <Welcome />
 
       <DataGridP />
     </>
