@@ -62,7 +62,7 @@ const DataGridP = () => {
           </div>
           <button
             className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            onClick={() => navigate("/project/new")}
+            onClick={() => navigate("/projects/new")}
           >
             <FaPlus className="mr-2" /> Add
           </button>
@@ -94,7 +94,7 @@ const DataGridP = () => {
                   <td className="p-4">{item.duration}</td>
                   <td className="p-4 text-center">
                     <button
-                      onClick={() => navigate(`/project/${item.id}`)}
+                      onClick={() => navigate(`/projects/${item.id}`)}
                       className="text-blue-500 hover:text-blue-700 transition"
                     >
                       <FaEye />
