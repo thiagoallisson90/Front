@@ -43,7 +43,7 @@ const NavBar = () => {
               to="/projects"
               className="text-gray-200 font-bold hover:text-white transition"
             >
-              Project
+              Projects
             </Link>
           </li>
           <li>
@@ -72,7 +72,7 @@ const NavBar = () => {
                 to="/projects"
                 className="block text-gray-200 font-bold hover:text-white transition"
               >
-                Project
+                Projects
               </Link>
             </li>
             <li>
