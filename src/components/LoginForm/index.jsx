@@ -39,12 +39,10 @@ const LoginForm = () => {
         resetField("email");
         resetField("password");
 
-        navigate("/home", {
-          state: {
-            name,
-            userType,
-          },
-        });
+        localStorage.setItem("username", name);
+        localStorage.setItem("usertype", userType);
+
+        navigate("/home");
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
