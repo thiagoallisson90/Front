@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
+import { closeAuth } from "../../routes/helpers";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const onClickLogout = () => {
-    localStorage.removeItem("authToken");
+    closeAuth();
     navigate("/login");
   };
 
