@@ -58,14 +58,8 @@ const MyRoutes = () => {
           }
         />
 
-        <Route
-          path="/about"
-          element={
-            <PrivateRoute>
-              <About />
-            </PrivateRoute>
-          }
-        />
+        {/* Other Routes */}
+        <Route path="/about" element={<About />} />
       </Routes>
     </BrowserRouter>
   );
