@@ -7,6 +7,7 @@ import PageError from "../../pages/PageError";
 import PublicRoute from "../PublicRoute";
 import PrivateRoute from "../PrivateRoute";
 import About from "../../pages/About";
+import Index from "../../pages/Index";
 
 const MyRoutes = () => {
   return (
@@ -35,20 +36,16 @@ const MyRoutes = () => {
           }
         />
 
-        <Route path="/recover" element={<RecoverPass />} />
-
-        <Route path="*" element={<PageError />} />
-
-        {/* Private Pages */}
         <Route
-          path="/"
+          path="/recover"
           element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            <PublicRoute>
+              <RecoverPass />
+            </PublicRoute>
           }
         />
 
+        {/* Private Pages */}
         <Route
           path="/home"
           element={
@@ -59,7 +56,10 @@ const MyRoutes = () => {
         />
 
         {/* Other Routes */}
+        <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
+
+        <Route path="*" element={<PageError />} />
       </Routes>
     </BrowserRouter>
   );
