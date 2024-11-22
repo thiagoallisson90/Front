@@ -17,6 +17,10 @@ const LoginForm = () => {
       setOpen(true);
       localStorage.setItem("alertShown", true);
     }
+
+    return () => {
+      setOpen(false);
+    };
   }, [location.state]);
 
   const handleClose = () => {
@@ -30,10 +34,17 @@ const LoginForm = () => {
         const data = await response.json();
         localStorage.setItem("authToken", data.token);
 
+        const { name, userType } = data;
+
         resetField("email");
         resetField("password");
 
-        navigate("/home");
+        navigate("/home", {
+          state: {
+            name,
+            userType,
+          },
+        });
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
