@@ -67,7 +67,11 @@ const LoginForm = () => {
             Login
           </h2>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="loginForm"
+            name="loginForm"
+          >
             {/* Email */}
             <div className="mb-4">
               <label

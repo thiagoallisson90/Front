@@ -55,8 +55,17 @@ const MyRoutes = () => {
           }
         />
 
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+
         {/* Other Routes */}
-        <Route path="/" element={<Index />} />
+        <Route path="/index" element={<Index />} />
         <Route path="/about" element={<About />} />
 
         <Route path="*" element={<PageError />} />
