@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const onClickLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   return (
     <nav className="bg-blue-700">
@@ -32,14 +38,6 @@ const NavBar = () => {
         <ul className="hidden md:flex space-x-8">
           <li>
             <Link
-              to="/about"
-              className="text-gray-200 font-bold hover:text-white transition"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
               to="/projects"
               className="text-gray-200 font-bold hover:text-white transition"
             >
@@ -47,8 +45,24 @@ const NavBar = () => {
             </Link>
           </li>
           <li>
+            <Link
+              to="/team"
+              className="text-gray-200 font-bold hover:text-white transition"
+            >
+              Team
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/profile"
+              className="text-gray-200 font-bold hover:text-white transition"
+            >
+              Profile
+            </Link>
+          </li>
+          <li>
             <button
-              onClick={() => alert("Logged out")}
+              onClick={() => onClickLogout()}
               className="text-gray-200 font-bold hover:text-white transition"
             >
               Logout
@@ -61,14 +75,6 @@ const NavBar = () => {
           <ul className="flex flex-col space-y-2 p-4">
             <li>
               <Link
-                to="/about"
-                className="block text-gray-200 font-bold hover:text-white transition"
-              >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/projects"
                 className="block text-gray-200 font-bold hover:text-white transition"
               >
@@ -76,8 +82,24 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
+              <Link
+                to="/team"
+                className="block text-gray-200 font-bold hover:text-white transition"
+              >
+                Team
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                className="block text-gray-200 font-bold hover:text-white transition"
+              >
+                Profile
+              </Link>
+            </li>
+            <li>
               <button
-                onClick={() => alert("Logged out")}
+                onClick={() => onClickLogout()}
                 className="block text-gray-200 font-bold hover:text-white transition"
               >
                 Logout
