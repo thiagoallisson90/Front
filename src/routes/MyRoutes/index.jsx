@@ -8,6 +8,7 @@ import PublicRoute from "../PublicRoute";
 import PrivateRoute from "../PrivateRoute";
 import About from "../../pages/About";
 import Projects from "../../pages/Projects";
+import Profile from "../../pages/Profile";
 
 const MyRoutes = () => {
   return (
@@ -69,6 +70,15 @@ const MyRoutes = () => {
           element={
             <PrivateRoute>
               <Projects />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           }
         />
