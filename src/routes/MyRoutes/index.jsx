@@ -9,6 +9,7 @@ import PrivateRoute from "../PrivateRoute";
 import About from "../../pages/About";
 import Projects from "../../pages/Projects";
 import Profile from "../../pages/Profile";
+import NewProject from "../../pages/NewProject";
 
 const MyRoutes = () => {
   return (
@@ -79,6 +80,15 @@ const MyRoutes = () => {
           element={
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/projects/new"
+          element={
+            <PrivateRoute>
+              <NewProject />
             </PrivateRoute>
           }
         />

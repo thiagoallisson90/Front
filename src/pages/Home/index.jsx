@@ -21,7 +21,6 @@ const Home = () => {
 
       <NavBar>
         <NavItem navigateTo={"/projects"}>Projects</NavItem>
-        <NavItem navigateTo={"/teams"}>Teams</NavItem>
         <NavItem navigateTo={"/profile"}>Profile</NavItem>
         <li>
           <ButtonLogout />
