@@ -1,349 +1,585 @@
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { siteName } from "../../components/Global";
+import NavBar from "../../components/NavBar";
+import NavItem from "../../components/NavItem";
+import ButtonLogout from "../../components/ButtonLogout";
+
+function validateCoord(coord) {
+  const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
+  return regex.test(coord);
+}
 
 const NewProject = () => {
+  const name = "New Project";
+  const [projectType, setProjectType] = useState("manual");
   const [step, setStep] = useState(1);
-  const [gateways, setGateways] = useState([]);
-  const [endDevices, setEndDevices] = useState([]);
 
   const {
-    control,
+    register,
     handleSubmit,
+    formState: { errors, isValid },
     watch,
-    //setValue,
-    //formState: { errors },
-    trigger,
+    setValue,
   } = useForm({
     defaultValues: {
-      gatewayMode: "manual",
-      gatewayFile: null,
-      gatewayCount: 0,
-      gatewayHeight: 10,
-      endDeviceMode: "manual",
-      endDeviceFile: null,
-      endDeviceCount: 0,
-      endDeviceHeight: 2,
-      frequency: 868,
-      bandwidth: 125,
-      power: 14,
-      spreadingFactor: 7,
+      gatewayCount: "1",
+      gatewayCoords: "",
+      bandwidth: "868",
+      frequency: "125",
+      edCount: "1",
+      edCoords: "",
+      edClass: "A",
+      opMode: "NACK",
+      nackPerc: "0",
+      ackPerc: "0",
     },
   });
 
-  const gatewayMode = watch("gatewayMode");
-  const endDeviceMode = watch("endDeviceMode");
+  const gatewayCount = watch("gatewayCount");
+  const edCount = watch("edCount");
+  const opMode = watch("opMode");
+  const nackPerc = watch("nackPerc");
+  const ackPerc = watch("ackPerc");
 
-  const handleNextStep = async () => {
-    const validFields =
-      step === 1
-        ? [
-            "gatewayMode",
-            gatewayMode === "manual" ? "gatewayFile" : "gatewayCount",
-          ]
-        : [
-            "endDeviceMode",
-            endDeviceMode === "manual" ? "endDeviceFile" : "endDeviceCount",
-          ];
-    const isValid = await trigger(validFields);
-    if (isValid) setStep(step + 1);
+  const handleNextStep = () => {
+    if (isValid && step < 3) {
+      setStep(step + 1);
+    }
   };
 
-  const handleBackStep = () => setStep(step - 1);
-
-  const handleFileUpload = (e, setter) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        setter(parsed);
-      } catch {
-        alert("Invalid file format. Please upload a valid JSON file.");
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  const handleGenerateCoordinates = (count, height) => {
-    const generated = Array.from({ length: count }, (_, i) => ({
-      id: i + 1,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      z: height,
-    }));
-    return generated;
+  const handleBackStep = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
   };
 
   const onSubmit = (data) => {
-    if (gatewayMode === "automatic") {
-      setGateways(
-        handleGenerateCoordinates(data.gatewayCount, data.gatewayHeight)
-      );
+    if (isValid) {
+      data.gatewayCoords = data.gatewayCoords
+        .split(";")
+        .map((str) => str.trim())
+        .join(";");
+
+      data.edCoords = data.edCoords
+        .split(";")
+        .map((str) => str.trim())
+        .join(";");
+      console.log(data);
+    } else {
+      console.log(errors);
     }
-    if (endDeviceMode === "automatic") {
-      setEndDevices(
-        handleGenerateCoordinates(data.endDeviceCount, data.endDeviceHeight)
-      );
-    }
-    alert("Project Registered Successfully!");
-    console.log("Gateways:", gateways);
-    console.log("End Devices:", endDevices);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="min-h-screen bg-gray-100 p-6"
-    >
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-blue-700 mb-6">
-          Project Registration
-        </h1>
+    <>
+      <HelmetProvider>
+        <Helmet>
+          <title>
+            {siteName} - {name}
+          </title>
+        </Helmet>
+      </HelmetProvider>
 
-        {/* Step Indicator */}
-        <div className="flex justify-between mb-6">
-          {[1, 2].map((num) => (
-            <div
-              key={num}
-              className={`w-1/2 p-2 text-center font-semibold rounded-lg ${
-                step === num
-                  ? "bg-blue-700 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              Step {num}
+      <NavBar>
+        <NavItem navigateTo={"/projects"}>Projects</NavItem>
+        <NavItem navigateTo={"/profile"}>Profile</NavItem>
+        <li>
+          <ButtonLogout />
+        </li>
+      </NavBar>
+
+      <form className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-blue-700 mb-6">
+            Project Registration
+          </h1>
+
+          {/* Project Type Selection */}
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-2">
+              Select Project Type
+            </label>
+            <div className="flex items-center space-x-4">
+              {["manual", "model"].map((type) => (
+                <button
+                  type="button"
+                  key={type}
+                  onClick={() => setProjectType(type)}
+                  className={`px-4 py-2 rounded-lg ${
+                    projectType === type
+                      ? "bg-blue-700 text-white"
+                      : "bg-gray-500 text-white"
+                  }`}
+                >
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Step 1: Gateway Information */}
-        {step === 1 && (
-          <div>
-            <h3 className="text-xl font-bold text-blue-700 mb-4">
-              Step 1: Gateway Information
-            </h3>
+          {/* Manual Configuration */}
+          {projectType === "manual" && (
+            <>
+              {/* Step Indicator */}
+              <div className="flex justify-between mb-6">
+                {[1, 2, 3].map((num) => (
+                  <div
+                    key={num}
+                    className={`w-1/2 p-2 text-center font-semibold rounded-lg ${
+                      step === num
+                        ? "bg-blue-700 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    Step {num}
+                  </div>
+                ))}
+              </div>
 
-            {/* Mode Selection */}
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Mode</label>
-              <Controller
-                name="gatewayMode"
-                control={control}
-                render={({ field }) => (
-                  <div className="flex items-center space-x-4">
-                    <label className="flex items-center space-x-2">
+              {/* Step 1: Gateway Configuration */}
+              {step === 1 && (
+                <>
+                  <div>
+                    <h3 className="text-xl font-bold text-blue-700 mb-4">
+                      Step 1: Gateway Configuration
+                    </h3>
+
+                    {/* Number of Gateways */}
+                    <div className="mb-4">
+                      <label className="block text-gray-700 mb-2">
+                        Number of Gateways
+                      </label>
                       <input
-                        {...field}
-                        type="radio"
-                        value="manual"
-                        checked={field.value === "manual"}
+                        name="gatewayCount"
+                        id="gatewayCount"
+                        className="block w-full border rounded-lg p-2"
+                        type="number"
+                        min="1"
+                        {...register("gatewayCount", {
+                          required: {
+                            value: true,
+                            message: "Enter a value greater than or equal to 1",
+                          },
+                          onChange: (e) => {
+                            e.target.value =
+                              parseInt(e.target.value) <= 0
+                                ? 1
+                                : e.target.value;
+                          },
+                        })}
                       />
-                      <span>Manual</span>
+                      {errors?.gatewayCount && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.gatewayCount.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Gateway Coordinates */}
+                    <div className="mb-6">
+                      <label className="block text-gray-700 mb-2">
+                        Gateway Coordinates (Format: x,y,z; x,y,z; ...)
+                      </label>
+                      <div className="relative">
+                        <textarea
+                          {...register("gatewayCoords", {
+                            required: {
+                              value: true,
+                              message: "Fill in the gateway coordinates",
+                            },
+                            validate: (value) => {
+                              const coords = value.split(";");
+
+                              if (coords.length != gatewayCount) {
+                                return `Please enter ${gatewayCount} coordinates!`;
+                              }
+
+                              for (const coord of coords) {
+                                if (!validateCoord(coord.trim())) {
+                                  return `Please enter valid coordinates`;
+                                }
+                              }
+
+                              return true;
+                            },
+                          })}
+                          placeholder="Enter coordinates (e.g., 1.2,3.4,5.6; 7.8,9.0,1.1)"
+                          className="block w-full border border-inherit rounded-lg p-2"
+                          rows={gatewayCount}
+                        />
+                        <span className="absolute text-xs text-gray-500 right-2 bottom-2">
+                          x and y coordinates plus z (height)
+                        </span>
+                      </div>
+                      {errors?.gatewayCoords && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.gatewayCoords.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bandwidth and Frequency */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">
+                      Bandwidth
                     </label>
                     <label className="flex items-center space-x-2">
                       <input
-                        {...field}
                         type="radio"
-                        value="automatic"
-                        checked={field.value === "automatic"}
+                        value="868"
+                        {...register("bandwidth", {
+                          required: {
+                            value: true,
+                            message: "Bandwidth is required!",
+                          },
+                        })}
                       />
-                      <span>Automatic</span>
+                      <span>868 MHz</span>
                     </label>
                   </div>
-                )}
-              />
-            </div>
 
-            {/* Manual Mode */}
-            {gatewayMode === "manual" && (
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">
-                  Upload Gateway Data (JSON or CSV)
-                </label>
-                <input
-                  type="file"
-                  accept=".json, .csv"
-                  onChange={(e) => handleFileUpload(e, setGateways)}
-                  className="block w-full border rounded-lg p-2"
-                />
-              </div>
-            )}
-
-            {/* Automatic Mode */}
-            {gatewayMode === "automatic" && (
-              <>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">
-                    Number of Gateways
-                  </label>
-                  <Controller
-                    name="gatewayCount"
-                    control={control}
-                    rules={{ required: "Please enter the number of gateways" }}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="number"
-                        min="1"
-                        className="block w-full border rounded-lg p-2"
-                      />
-                    )}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">
-                    Height of Gateways (z-axis)
-                  </label>
-                  <Controller
-                    name="gatewayHeight"
-                    control={control}
-                    rules={{ required: "Please enter the height of gateways" }}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="number"
-                        min="1"
-                        className="block w-full border rounded-lg p-2"
-                      />
-                    )}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Step 2: End Device Information */}
-        {step === 2 && (
-          <div>
-            <h3 className="text-xl font-bold text-blue-700 mb-4">
-              Step 2: End Device Information
-            </h3>
-
-            {/* Mode Selection */}
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Mode</label>
-              <Controller
-                name="endDeviceMode"
-                control={control}
-                render={({ field }) => (
-                  <div className="flex items-center space-x-4">
-                    <label className="flex items-center space-x-2">
-                      <input
-                        {...field}
-                        type="radio"
-                        value="manual"
-                        checked={field.value === "manual"}
-                      />
-                      <span>Manual</span>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">
+                      Frequency
                     </label>
                     <label className="flex items-center space-x-2">
                       <input
-                        {...field}
                         type="radio"
-                        value="automatic"
-                        checked={field.value === "automatic"}
+                        value="125"
+                        {...register("frequency", {
+                          required: {
+                            value: true,
+                            message: "Frequency is required!",
+                          },
+                        })}
                       />
-                      <span>Automatic</span>
+                      <span>125 kHz</span>
                     </label>
                   </div>
-                )}
-              />
-            </div>
 
-            {/* Manual Mode */}
-            {endDeviceMode === "manual" && (
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">
-                  Upload End Device Data (JSON or CSV)
-                </label>
-                <input
-                  type="file"
-                  accept=".json, .csv"
-                  onChange={(e) => handleFileUpload(e, setEndDevices)}
-                  className="block w-full border rounded-lg p-2"
-                />
-              </div>
-            )}
+                  <div className="flex justify-between mt-6">
+                    <button
+                      type="button"
+                      onClick={handleSubmit(handleNextStep)}
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 ml-auto"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </>
+              )}
 
-            {/* Automatic Mode */}
-            {endDeviceMode === "automatic" && (
-              <>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">
-                    Number of End Devices
-                  </label>
-                  <Controller
-                    name="endDeviceCount"
-                    control={control}
-                    rules={{
-                      required: "Please enter the number of end devices",
-                    }}
-                    render={({ field }) => (
+              {/* Step 2: ED's Configuration */}
+              {step === 2 && (
+                <>
+                  <div>
+                    <h3 className="text-xl font-bold text-blue-700 mb-4">
+                      {`Step 2: ED's Configuration`}
+                    </h3>
+
+                    {/* Number of EDs */}
+                    <div className="mb-4">
+                      <label className="block text-gray-700 mb-2">
+                        Number of EDs
+                      </label>
                       <input
-                        {...field}
+                        name="edCount"
+                        id="edCount"
+                        className="block w-full border rounded-lg p-2"
                         type="number"
                         min="1"
-                        className="block w-full border rounded-lg p-2"
+                        {...register("edCount", {
+                          required: {
+                            value: true,
+                            message: "Enter a value greater than or equal to 1",
+                          },
+                          onChange: (e) => {
+                            e.target.value =
+                              parseInt(e.target.value) <= 0
+                                ? 1
+                                : e.target.value;
+                          },
+                        })}
                       />
-                    )}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">
-                    Height of End Devices (z-axis)
-                  </label>
-                  <Controller
-                    name="endDeviceHeight"
-                    control={control}
-                    rules={{
-                      required: "Please enter the height of end devices",
-                    }}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="number"
-                        min="1"
-                        className="block w-full border rounded-lg p-2"
-                      />
-                    )}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        )}
+                      {errors?.edCount && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.edCount?.message}
+                        </p>
+                      )}
+                    </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-6">
-          {step > 1 && (
-            <button
-              type="button"
-              onClick={handleBackStep}
-              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-            >
-              Back
-            </button>
+                    {/* ED's Coordinates */}
+                    <div className="mb-6">
+                      <label className="block text-gray-700 mb-2">
+                        {`ED's Coordinates (Format: x,y,z; x,y,z; ...)`}
+                      </label>
+                      <div className="relative">
+                        <textarea
+                          {...register("edCoords", {
+                            required: {
+                              value: true,
+                              message: "Fill in the ED's coordinates",
+                            },
+                            validate: (value) => {
+                              const coords = value.split(";");
+
+                              if (coords.length != edCount) {
+                                return `Please enter ${edCount} coordinates!`;
+                              }
+
+                              for (const coord of coords) {
+                                if (!validateCoord(coord.trim())) {
+                                  return `Please enter valid coordinates`;
+                                }
+                              }
+
+                              return true;
+                            },
+                          })}
+                          placeholder="Enter coordinates (e.g., 1.2,3.4,5.6; 7.8,9.0,1.1)"
+                          className="block w-full border border-inherit rounded-lg p-2"
+                          rows={edCount}
+                        />
+                        <span className="absolute text-xs text-gray-500 right-2 bottom-2">
+                          x and y coordinates plus z (height)
+                        </span>
+                      </div>
+                      {errors?.edCoords && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.edCoords.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ED's Classes */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">{`ED's Classes`}</label>
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        value="A"
+                        {...register("edClass", {
+                          required: {
+                            value: true,
+                            message: "Class is required!",
+                          },
+                        })}
+                      />
+                      <span>Class A</span>
+                    </label>
+                  </div>
+
+                  {/* Operation Mode */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">
+                      Operation Mode
+                    </label>
+
+                    {/* NACK */}
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        value="NACK"
+                        {...register("opMode", {
+                          required: true,
+                          onChange: (e) => {
+                            if (e.target.value === "NACK") {
+                              setValue("nackPerc", "100");
+                              setValue("ackPerc", "0");
+                            } else if (e.target.value === "ACK") {
+                              setValue("nackPerc", "0");
+                              setValue("ackPerc", "100");
+                            }
+                          },
+                        })}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                      />
+                      <span className="text-gray-700">NACK</span>
+                    </label>
+
+                    {/* ACK */}
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        value="ACK"
+                        {...register("opMode", {
+                          required: true,
+                          onChange: (e) => {
+                            if (e.target.value === "ACK") {
+                              setValue("ackPerc", "100");
+                              setValue("nackPerc", "0");
+                            } else if (e.target.value === "NACK") {
+                              setValue("ackPerc", "0");
+                              setValue("nackPerc", "100");
+                            }
+                          },
+                        })}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                      />
+                      <span className="text-gray-700">ACK</span>
+                    </label>
+
+                    {/* Mixed */}
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        value="Mixed"
+                        {...register("opMode", { required: true })}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                      />
+                      <span className="text-gray-700">Mixed</span>
+                    </label>
+                  </div>
+
+                  {opMode === "Mixed" && (
+                    <>
+                      <div className="mb-4">
+                        <input
+                          name="nackPerc"
+                          id="nackPerc"
+                          {...register("nackPerc", {
+                            required: {
+                              value: true,
+                              message: "Choose a value for NACK Percentage!",
+                            },
+                            onChange: (e) => {
+                              setValue(
+                                "ackPerc",
+                                (100 - parseInt(e.target.value)).toString()
+                              );
+                            },
+                          })}
+                          type="range"
+                          step="1"
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="text-right text-gray-700">
+                        {nackPerc}% NACK, {ackPerc}% ACK
+                      </div>
+
+                      <input
+                        type="hidden"
+                        name="ackPerc"
+                        id="ackPerc"
+                        {...register("ackPerc")}
+                      />
+                    </>
+                  )}
+
+                  {/* Tx. Avg. Rate - Poisson */}
+                  <div className="mb-4">
+                    <div className="mb-4">
+                      <label className="block text-gray-700 mb-2">
+                        {`Poisson Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          name="poissonApp"
+                          id="poissonApp"
+                          placeholder="Tx Avg Rate, Payload, %, Delay (e.g. 600, 50, 40, 1)"
+                          {...register("poissonApp")}
+                          className="block w-full border rounded-lg p-2"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Tx. Avg. Rate - Uniform */}
+                  <div className="mb-4">
+                    <div className="mb-4">
+                      <label className="block text-gray-700 mb-2">
+                        {`Uniform Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          name="uniformApp"
+                          id="uniformApp"
+                          placeholder="Tx Avg Rate, Payload, %, Delay (e.g. 600, 50, 50, 1)"
+                          {...register("uniformApp")}
+                          className="block w-full border rounded-lg p-2"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Tx. Avg. Rate - One Shot */}
+                  <div className="mb-4">
+                    <div className="mb-4">
+                      <label className="block text-gray-700 mb-2">
+                        {`One Shot Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          name="oneApp"
+                          id="oneApp"
+                          placeholder="Tx Avg Rate, Payload, %, and Delay (s) (e.g. 600, 50, 10)"
+                          {...register("oneApp")}
+                          className="block w-full border rounded-lg p-2"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between mt-6">
+                    <button
+                      type="button"
+                      onClick={handleBackStep}
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                    >
+                      Back
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSubmit(handleNextStep)}
+                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 ml-auto"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </>
+              )}
+            </>
           )}
-          {step < 2 ? (
-            <button
-              type="button"
-              onClick={handleNextStep}
-              className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 ml-auto"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 ml-auto"
-            >
-              Submit
-            </button>
+
+          {step === 3 && (
+            <>
+              <div>
+                <h3 className="text-xl font-bold text-blue-700 mb-4">
+                  Step 3: Operational Configuration
+                </h3>
+
+                <div className="flex justify-between mt-6">
+                  <button
+                    type="button"
+                    onClick={handleBackStep}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                  >
+                    Back
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSubmit(onSubmit)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 ml-auto"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </>
           )}
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 

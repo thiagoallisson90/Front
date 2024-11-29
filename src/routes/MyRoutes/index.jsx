@@ -10,6 +10,7 @@ import About from "../../pages/About";
 import Projects from "../../pages/Projects";
 import Profile from "../../pages/Profile";
 import NewProject from "../../pages/NewProject";
+import MyMap from "../../pages/MyMap";
 
 const MyRoutes = () => {
   return (
@@ -46,6 +47,8 @@ const MyRoutes = () => {
             </PublicRoute>
           }
         />
+
+        <Route path="/map" element={<MyMap />} />
 
         {/* Private Pages */}
         <Route
