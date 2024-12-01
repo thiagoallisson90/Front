@@ -5,6 +5,8 @@ import { siteName } from "../../components/Global";
 import NavBar from "../../components/NavBar";
 import NavItem from "../../components/NavItem";
 import ButtonLogout from "../../components/ButtonLogout";
+import { IconButton, Tooltip } from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 function validateCoord(coord) {
   const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
@@ -32,8 +34,15 @@ const NewProject = () => {
       edCoords: "",
       edClass: "A",
       opMode: "NACK",
-      nackPerc: "0",
+      nackPerc: "100",
       ackPerc: "0",
+      simArea: "",
+      simTime: "",
+      title: "",
+      description: "",
+      poissonApp: "",
+      uniformApp: "",
+      oneApp: "",
     },
   });
 
@@ -138,18 +147,19 @@ const NewProject = () => {
                 ))}
               </div>
 
-              {/* Step 1: Gateway Configuration */}
+              {/* Step 1: Gateway's Configuration */}
               {step === 1 && (
                 <>
                   <div>
                     <h3 className="text-xl font-bold text-blue-700 mb-4">
-                      Step 1: Gateway Configuration
+                      {"Step 1: Gateway's Configuration"}
                     </h3>
 
                     {/* Number of Gateways */}
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
                         Number of Gateways
+                        <span className="text-red-600">*</span>
                       </label>
                       <input
                         name="gatewayCount"
@@ -180,7 +190,8 @@ const NewProject = () => {
                     {/* Gateway Coordinates */}
                     <div className="mb-6">
                       <label className="block text-gray-700 mb-2">
-                        Gateway Coordinates (Format: x,y,z; x,y,z; ...)
+                        {"Gateway's Coordinates (Format: x,y,z; x,y,z; ...)"}
+                        <span className="text-red-600">*</span>
                       </label>
                       <div className="relative">
                         <textarea
@@ -225,6 +236,7 @@ const NewProject = () => {
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-2">
                       Bandwidth
+                      <span className="text-red-600">*</span>
                     </label>
                     <label className="flex items-center space-x-2">
                       <input
@@ -244,6 +256,7 @@ const NewProject = () => {
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-2">
                       Frequency
+                      <span className="text-red-600">*</span>
                     </label>
                     <label className="flex items-center space-x-2">
                       <input
@@ -284,6 +297,7 @@ const NewProject = () => {
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
                         Number of EDs
+                        <span className="text-red-600">*</span>
                       </label>
                       <input
                         name="edCount"
@@ -315,6 +329,7 @@ const NewProject = () => {
                     <div className="mb-6">
                       <label className="block text-gray-700 mb-2">
                         {`ED's Coordinates (Format: x,y,z; x,y,z; ...)`}
+                        <span className="text-red-600">*</span>
                       </label>
                       <div className="relative">
                         <textarea
@@ -357,7 +372,10 @@ const NewProject = () => {
 
                   {/* ED's Classes */}
                   <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">{`ED's Classes`}</label>
+                    <label className="block text-gray-700 mb-2">
+                      {`ED's Classes`}
+                      <span className="text-red-600">*</span>
+                    </label>
                     <label className="flex items-center space-x-2">
                       <input
                         type="radio"
@@ -371,12 +389,18 @@ const NewProject = () => {
                       />
                       <span>Class A</span>
                     </label>
+                    {errors?.edClass && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.edClass?.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Operation Mode */}
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-2">
                       Operation Mode
+                      <span className="text-red-600">*</span>
                     </label>
 
                     {/* NACK */}
@@ -475,14 +499,25 @@ const NewProject = () => {
                   <div className="mb-4">
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
-                        {`Poisson Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                        {`Poisson Application (Format: Tx, Payload, % of EDs, and Delay)`}
+
+                        <Tooltip
+                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
+                          placement="right"
+                          arrow
+                        >
+                          <IconButton className="text-blue-500">
+                            <HelpOutlineIcon />
+                          </IconButton>
+                        </Tooltip>
                       </label>
+
                       <label className="flex items-center space-x-2">
                         <input
                           type="text"
                           name="poissonApp"
                           id="poissonApp"
-                          placeholder="Tx Avg Rate, Payload, %, Delay (e.g. 600, 50, 40, 1)"
+                          placeholder="5pkt/h, 50B, 50%, 1min"
                           {...register("poissonApp")}
                           className="block w-full border rounded-lg p-2"
                         />
@@ -494,14 +529,25 @@ const NewProject = () => {
                   <div className="mb-4">
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
-                        {`Uniform Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                        {`Uniform Application (Format: Tx, Payload, % of EDs, and Delay)`}
+
+                        <Tooltip
+                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
+                          placement="right"
+                          arrow
+                        >
+                          <IconButton className="text-blue-500">
+                            <HelpOutlineIcon />
+                          </IconButton>
+                        </Tooltip>
                       </label>
+
                       <label className="flex items-center space-x-2">
                         <input
                           type="text"
                           name="uniformApp"
                           id="uniformApp"
-                          placeholder="Tx Avg Rate, Payload, %, Delay (e.g. 600, 50, 50, 1)"
+                          placeholder="5pkt/h, 50B, 40%, 1min"
                           {...register("uniformApp")}
                           className="block w-full border rounded-lg p-2"
                         />
@@ -513,14 +559,25 @@ const NewProject = () => {
                   <div className="mb-4">
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
-                        {`One Shot Application (Format: Tx (s), Payload (B), % of EDs, and Delay (s))`}
+                        {`One Shot Application (Format: Tx, Payload, % of EDs, and Delay)`}
+
+                        <Tooltip
+                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
+                          placement="right"
+                          arrow
+                        >
+                          <IconButton className="text-blue-500">
+                            <HelpOutlineIcon />
+                          </IconButton>
+                        </Tooltip>
                       </label>
+
                       <label className="flex items-center space-x-2">
                         <input
                           type="text"
                           name="oneApp"
                           id="oneApp"
-                          placeholder="Tx Avg Rate, Payload, %, and Delay (s) (e.g. 600, 50, 10)"
+                          placeholder="5pkt/h, 50B, 10%, 1min"
                           {...register("oneApp")}
                           className="block w-full border rounded-lg p-2"
                         />
@@ -556,6 +613,163 @@ const NewProject = () => {
                 <h3 className="text-xl font-bold text-blue-700 mb-4">
                   Step 3: Operational Configuration
                 </h3>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    {`Simulation Area (Format: x-dimension (m or km) and y-dimension (m or km))`}
+                    <span className="text-red-600">*</span>
+
+                    <Tooltip
+                      title="Provide the dimensions with the unit: e.g. 1000m, 1000m; or 2km, 2km."
+                      placement="right"
+                      arrow
+                    >
+                      <IconButton className="text-blue-500">
+                        <HelpOutlineIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </label>
+
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      name="simArea"
+                      id="simArea"
+                      placeholder="x-dimension, y-dimension (e.g. 1000m, 1000m; or 5km, 5km)"
+                      {...register("simArea", {
+                        required: {
+                          value: true,
+                          message: "Simulation Area is required!",
+                        },
+                      })}
+                      className="block w-full border rounded-lg p-2"
+                    />
+                  </label>
+                  {errors?.simArea && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.simArea?.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    {`Simulation Time (Format: time in s, min, h, or day (d))`}
+                    <span className="text-red-600">*</span>
+
+                    <Tooltip
+                      title="Provide the time with the unit: e.g. 50s, or 60min; or 12h, or 1d."
+                      placement="right"
+                      arrow
+                    >
+                      <IconButton className="text-blue-500">
+                        <HelpOutlineIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </label>
+
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      name="simTime"
+                      id="simTime"
+                      placeholder="time (e.g. 50s, 60min, 12h, or 1d)"
+                      {...register("simTime", {
+                        required: {
+                          value: true,
+                          message: "Simulation Time is required!",
+                        },
+                      })}
+                      className="block w-full border rounded-lg p-2"
+                    />
+                  </label>
+                  {errors?.simTime && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.simTime?.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    {`Title of Simulation Project`}
+                    <span className="text-red-600">*</span>
+                  </label>
+
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      name="title"
+                      id="title"
+                      placeholder="Project title with up to 50 characters"
+                      {...register("title", {
+                        required: {
+                          value: true,
+                          message: "Title is required!",
+                        },
+                        minLength: {
+                          value: 3,
+                          message: "Title must have at least 3 characters",
+                        },
+                        maxLength: {
+                          value: 50,
+                          message: "Title must be up to 50 characters",
+                        },
+                        onChange: (e) => {
+                          if (e.target.value.length > 50) {
+                            setValue("title", e.target.value.substring(0, 50));
+                          }
+                        },
+                      })}
+                      className="block w-full border rounded-lg p-2"
+                    />
+                  </label>
+                  {errors?.title && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.title?.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    {`Description of Simulation Project`}
+                  </label>
+
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      name="description"
+                      id="description"
+                      placeholder="Project description with up to 255 characters [Optional]"
+                      {...register("description", {
+                        minLength: {
+                          value: 3,
+                          message:
+                            "Description must have at least 3 characters",
+                        },
+                        maxLength: {
+                          value: 255,
+                          message: "Description with up to 255 characters",
+                        },
+                        onChange: (e) => {
+                          if (e.target.value.length > 255) {
+                            setValue(
+                              "description",
+                              e.target.value.substring(0, 255)
+                            );
+                          }
+                        },
+                      })}
+                      className="block w-full border rounded-lg p-2"
+                    />
+                  </label>
+                  {errors?.description && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.description?.message}
+                    </p>
+                  )}
+                </div>
 
                 <div className="flex justify-between mt-6">
                   <button
