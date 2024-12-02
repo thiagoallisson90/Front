@@ -43,6 +43,9 @@ const NewProject = () => {
       poissonApp: "",
       uniformApp: "",
       oneApp: "",
+      registeredApps: "0",
+      lossModel: "okumura",
+      shadowingModel: "correlated",
     },
   });
 
@@ -52,7 +55,14 @@ const NewProject = () => {
   const nackPerc = watch("nackPerc");
   const ackPerc = watch("ackPerc");
 
-  const handleNextStep = () => {
+  const handleNextStep = (data) => {
+    const poissonApp = data["poissonApp"].split(",")[2];
+    const uniformApp = data["uniformApp"].split(",")[2];
+    const oneApp = data["uniformApp"].split(",")[2];
+
+    if (step === 2) {
+      console.log(poissonApp, uniformApp, oneApp);
+    }
     if (isValid && step < 3) {
       setStep(step + 1);
     }
@@ -497,6 +507,11 @@ const NewProject = () => {
 
                   {/* Tx. Avg. Rate - Poisson */}
                   <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">
+                      Choose the types of application to be tested
+                      <span className="text-red-600">*</span>
+                    </label>
+
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
                         {`Poisson Application (Format: Tx, Payload, % of EDs, and Delay)`}
@@ -559,10 +574,10 @@ const NewProject = () => {
                   <div className="mb-4">
                     <div className="mb-4">
                       <label className="block text-gray-700 mb-2">
-                        {`One Shot Application (Format: Tx, Payload, % of EDs, and Delay)`}
+                        {`One Shot Application (Format: Payload, % of EDs, and Delay)`}
 
                         <Tooltip
-                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
+                          title="One Shot sends a single packet. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
                           placement="right"
                           arrow
                         >
@@ -688,6 +703,67 @@ const NewProject = () => {
                       {errors.simTime?.message}
                     </p>
                   )}
+                </div>
+
+                {/* Path Loss Model */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    Path Loss Model
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      value="okumura"
+                      name="lossModel"
+                      id="okumura"
+                      {...register("lossModel", {
+                        required: {
+                          value: true,
+                          message: "Path loss model is required!",
+                        },
+                      })}
+                    />
+                    <span>Okumura-Hata</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      value="log"
+                      name="lossModel"
+                      id="log"
+                      {...register("lossModel", {
+                        required: {
+                          value: true,
+                          message: "Path loss model is required!",
+                        },
+                      })}
+                    />
+                    <span>LogDistance</span>
+                  </label>
+                </div>
+
+                {/* Path Loss Model */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">
+                    Path Loss Model
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      value="correlated"
+                      name="shadowingModel"
+                      id="shadowingModel"
+                      {...register("shadowingModel", {
+                        required: {
+                          value: true,
+                          message: "Shadowing model is required!",
+                        },
+                      })}
+                    />
+                    <span>Correlated-Shadowing</span>
+                  </label>
                 </div>
 
                 <div className="mb-4">
