@@ -7,6 +7,7 @@ import NavItem from "../../components/NavItem";
 import ButtonLogout from "../../components/ButtonLogout";
 import { IconButton, Tooltip } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { simulation } from "../../services/api";
 
 function validateCoord(coord) {
   const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
@@ -74,9 +75,9 @@ const NewProject = () => {
     }
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (isValid) {
-      data.gatewayCoords = data.gatewayCoords
+      /*data.gatewayCoords = data.gatewayCoords
         .split(";")
         .map((str) => str.trim())
         .join(";");
@@ -85,7 +86,9 @@ const NewProject = () => {
         .split(";")
         .map((str) => str.trim())
         .join(";");
+      console.log(data);*/
       console.log(data);
+      await simulation(data);
     } else {
       console.log(errors);
     }

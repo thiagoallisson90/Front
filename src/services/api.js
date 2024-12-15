@@ -4,7 +4,7 @@ const baseUrl =
     : import.meta.env.VITE_API_URL_PROD;
 
 const auth = async (dataForm) => {
-  return await fetch(`${baseUrl}/api/v1/auth/signup`, {
+  return await fetch(`${baseUrl}/api/user/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +14,7 @@ const auth = async (dataForm) => {
 };
 
 const login = async (dataForm) => {
-  return await fetch(`${baseUrl}/api/v1/auth/login`, {
+  return await fetch(`${baseUrl}/api/user/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,4 +23,14 @@ const login = async (dataForm) => {
   });
 };
 
-export { auth, login };
+const simulation = async (dataForm) => {
+  return await fetch(`${baseUrl}/api/simulation`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataForm),
+  });
+};
+
+export { auth, login, simulation };

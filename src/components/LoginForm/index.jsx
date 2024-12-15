@@ -11,6 +11,7 @@ const LoginForm = () => {
   const ok = location.state?.ok;
 
   const [open, setOpen] = useState(false);
+  const [errors, setErrors] = useState("");
 
   useEffect(() => {
     if (location.state?.ok && !localStorage.getItem("alertShown")) {
@@ -18,10 +19,8 @@ const LoginForm = () => {
       localStorage.setItem("alertShown", true);
     }
 
-    return () => {
-      setOpen(false);
-    };
-  }, [location.state]);
+    return () => {};
+  }, [location.state, errors]);
 
   const handleClose = () => {
     setOpen(false);
@@ -43,6 +42,9 @@ const LoginForm = () => {
         localStorage.setItem("usertype", userType);
 
         navigate("/home");
+      } else {
+        const data = await response.json();
+        setErrors(data.message);
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {
@@ -70,6 +72,13 @@ const LoginForm = () => {
             id="loginForm"
             name="loginForm"
           >
+            {/* Errors */}
+            {errors != "" && (
+              <p className="text-red-500 text-sm mt-1 text-center my-2 font-bold">
+                {errors}
+              </p>
+            )}
+
             {/* Email */}
             <div className="mb-4">
               <label
