@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
+import { getName } from "../../routes/helpers";
 
 const Welcome = () => {
-  const [username, setUsername] = useState(
-    localStorage.getItem("username") || ""
-  );
+  const [username, setUsername] = useState(getName() || "");
 
   useEffect(() => {
     const getFirstAndSecondNames = () => {

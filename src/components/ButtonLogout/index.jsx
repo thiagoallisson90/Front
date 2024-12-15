@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { closeAuth } from "../../routes/helpers";
+import { closeAuth, getRefreshToken } from "../../routes/helpers";
+import { logout } from "../../services/api";
 
 const ButtonLogout = () => {
   const navigate = useNavigate();
 
   const onClickLogout = () => {
+    logout(getRefreshToken());
     closeAuth();
     navigate("/login");
   };

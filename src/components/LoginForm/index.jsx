@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../services/api";
 import { Snackbar, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
+import { registerData } from "../../routes/helpers";
 
 const LoginForm = () => {
   const { register, handleSubmit, resetField } = useForm();
@@ -30,21 +31,14 @@ const LoginForm = () => {
     try {
       const response = await login(dataForm);
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("authToken", data.token);
-
-        const { name, userType } = data;
+        registerData(response);
 
         resetField("email");
         resetField("password");
 
-        localStorage.setItem("username", name);
-        localStorage.setItem("usertype", userType);
-
         navigate("/home");
       } else {
-        const data = await response.json();
-        setErrors(data.message);
+        setErrors(response.message);
       }
     } catch (error) {
       if (import.meta.env.VITE_REACT_ENV == "development") {

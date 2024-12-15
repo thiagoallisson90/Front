@@ -14,13 +14,15 @@ const auth = async (dataForm) => {
 };
 
 const login = async (dataForm) => {
-  return await fetch(`${baseUrl}/api/user/login`, {
+  const response = await fetch(`${baseUrl}/api/user/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dataForm),
   });
+
+  return await response.json();
 };
 
 const simulation = async (dataForm) => {
@@ -33,4 +35,14 @@ const simulation = async (dataForm) => {
   });
 };
 
-export { auth, login, simulation };
+const logout = async (token) => {
+  return await fetch(`${baseUrl}/api/user/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(token),
+  });
+};
+
+export { auth, login, logout, simulation };
