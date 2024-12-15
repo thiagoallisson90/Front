@@ -1,9 +1,10 @@
-const keys = ["name", "refreshToken", "token"];
+const keys = ["name", "refreshToken", "token", "email"];
 
-export const registerData = ({ name, refreshToken, token }) => {
+export const registerData = ({ name, refreshToken, token, email }) => {
   localStorage.setItem(keys[0], name);
   localStorage.setItem(keys[1], refreshToken);
   localStorage.setItem(keys[2], token);
+  localStorage.setItem(keys[3], email);
 };
 
 export const isAuthenticated = () => {
@@ -22,4 +23,8 @@ export const getName = () => {
 
 export const getRefreshToken = () => {
   localStorage.getItem(keys[1]) || "";
+};
+
+export const getEmail = () => {
+  localStorage.getItem(keys[3]) || "";
 };

@@ -30,6 +30,7 @@ const LoginForm = () => {
   const onSubmit = async (dataForm) => {
     try {
       const response = await login(dataForm);
+      response.email = dataForm.email;
       if (response.ok) {
         registerData(response);
 
