@@ -3,10 +3,10 @@ import { FaEye, FaPlus } from "react-icons/fa";
 import ButtonPage from "../ButtonPage";
 import { useNavigate } from "react-router-dom";
 
-const DataGridP = () => {
+const DataGridP = (simulations) => {
   const navigate = useNavigate();
 
-  const [data, setData] = useState([
+  /*const [data, setData] = useState([
     { id: 1, name: "Project AMI 1", status: "Completed", duration: "2h 30m" },
     { id: 2, name: "Project AMI 2", status: "In Progress", duration: "1h 15m" },
     { id: 3, name: "Project Mobility", status: "Pending", duration: "N/A" },
@@ -17,7 +17,7 @@ const DataGridP = () => {
       status: "Completed",
       duration: "3h 20m",
     },
-  ]);
+  ]);*/
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -25,7 +25,9 @@ const DataGridP = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredData = data.filter(
+  console.log(simulations);
+
+  const filteredData = simulations.filter(
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.status.toLowerCase().includes(searchTerm.toLowerCase())

@@ -25,14 +25,25 @@ const login = async (dataForm) => {
   return await response.json();
 };
 
-const simulation = async (dataForm) => {
-  return await fetch(`${baseUrl}/api/simulation`, {
+const createSim = async (dataForm) => {
+  const response = await fetch(`${baseUrl}/api/simulation`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dataForm),
   });
+
+  return await response.json();
+};
+
+const getSims = async (email, token) => {
+  const response = await fetch(`${baseUrl}/api/simulation/user/${email}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  return await response.json();
 };
 
 const logout = async (token) => {
@@ -45,4 +56,21 @@ const logout = async (token) => {
   });
 };
 
-export { auth, login, logout, simulation };
+const refreshToken = async (refresh_token) => {
+  const response = await fetch(`${baseUrl}/api/user/refresh-token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${refresh_token}`,
+    },
+    /*withCredentials: true,
+    crossorigin: true,*/
+    mode: "no-cors",
+  }).catch((error) => {
+    console.log(error);
+  });
+
+  return await response.json();
+};
+
+export { auth, login, logout, createSim, getSims, refreshToken };

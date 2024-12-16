@@ -7,6 +7,11 @@ export const registerData = ({ name, refreshToken, token, email }) => {
   localStorage.setItem(keys[3], email);
 };
 
+export const registerTokens = ({ token, refreshToken }) => {
+  localStorage.setItem(keys[1], refreshToken);
+  localStorage.setItem(keys[2], token);
+};
+
 export const isAuthenticated = () => {
   return localStorage.getItem(keys[0]) !== null;
 };
@@ -21,10 +26,14 @@ export const getName = () => {
   return localStorage.getItem(keys[0]) || "";
 };
 
+export const getToken = () => {
+  return localStorage.getItem(keys[2]) || "";
+};
+
 export const getRefreshToken = () => {
-  localStorage.getItem(keys[1]) || "";
+  return localStorage.getItem(keys[1]) || "";
 };
 
 export const getEmail = () => {
-  localStorage.getItem(keys[3]) || "";
+  return localStorage.getItem(keys[3]) || "";
 };

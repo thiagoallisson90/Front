@@ -7,7 +7,7 @@ import NavItem from "../../components/NavItem";
 import ButtonLogout from "../../components/ButtonLogout";
 import { IconButton, Tooltip } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { simulation } from "../../services/api";
+import { createSim as simulation } from "../../services/api";
 
 function validateCoord(coord) {
   const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
