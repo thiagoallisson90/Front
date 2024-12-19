@@ -23,7 +23,10 @@ const LoginForm = () => {
     return () => {};
   }, [location.state, errors]);
 
-  const handleClose = () => {
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
     setOpen(false);
   };
 
@@ -50,7 +53,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <Snackbar open={open} autoHideDuration={8000} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" className="text-sm">
           {ok}
         </Alert>
