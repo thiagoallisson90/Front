@@ -8,6 +8,7 @@ import ButtonLogout from "../../components/ButtonLogout";
 import { IconButton, Tooltip } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { createSim as simulation } from "../../services/api";
+import Welcome from "../../components/Welcome/Index";
 
 function validateCoord(coord) {
   const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
@@ -106,11 +107,13 @@ const NewProject = () => {
 
       <NavBar>
         <NavItem navigateTo={"/projects"}>Projects</NavItem>
-        <NavItem navigateTo={"/profile"}>Profile</NavItem>
+        {/*<NavItem navigateTo={"/profile"}>Profile</NavItem>*/}
         <li>
           <ButtonLogout />
         </li>
       </NavBar>
+
+      <Welcome />
 
       <form className="min-h-screen bg-gray-100 p-6">
         <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -124,7 +127,21 @@ const NewProject = () => {
               Select Project Type
             </label>
             <div className="flex items-center space-x-4">
-              {["manual", "model"].map((type) => (
+              {/*["manual", "model"].map((type) => (
+                <button
+                  type="button"
+                  key={type}
+                  onClick={() => setProjectType(type)}
+                  className={`px-4 py-2 rounded-lg ${
+                    projectType === type
+                      ? "bg-blue-700 text-white"
+                      : "bg-gray-500 text-white"
+                  }`}
+                >
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </button>
+              ))*/}
+              {["manual"].map((type) => (
                 <button
                   type="button"
                   key={type}

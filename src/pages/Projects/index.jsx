@@ -22,7 +22,7 @@ const Projects = () => {
 
       <NavBar>
         <NavItem navigateTo={"/projects"}>Projects</NavItem>
-        <NavItem navigateTo={"/profile"}>Profile</NavItem>
+        {/*<NavItem navigateTo={"/profile"}>Profile</NavItem>*/}
         <li>
           <ButtonLogout />
         </li>

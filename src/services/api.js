@@ -47,7 +47,11 @@ const login = async (dataForm) => {
     const response = await api.post("/api/user/login", { email, password });
     return response.data;
   } catch (error) {
-    return { ok: false, message: "E-mail or password incorrect!" };
+    return {
+      ok: false,
+      message: "E-mail or password incorrect!",
+      error: error.message || error.response,
+    };
   }
 };
 
