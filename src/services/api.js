@@ -22,7 +22,7 @@ const auth = async (dataForm) => {
   });
 };
 
-const login = async (dataForm) => {
+/*const login = async (dataForm) => {
   const response = await fetch(`${baseUrl}/api/user/login`, {
     method: "POST",
     headers: {
@@ -32,6 +32,15 @@ const login = async (dataForm) => {
   });
 
   return await response.json();
+};*/
+const login = async (dataForm) => {
+  const { email, password } = dataForm;
+  try {
+    const response = await api.post("/api/user/login", { email, password });
+    return response.data;
+  } catch (error) {
+    console.error("Erro na requisição:", error.response || error.message);
+  }
 };
 
 /*const logout = async (token) => {
@@ -46,12 +55,11 @@ const login = async (dataForm) => {
     body: JSON.stringify(token),
   });
 };*/
-
 const logout = async (token, email) => {
   try {
     await api.post(
-      "/api/user/logout", // Substitua pelo endpoint desejado
-      { email }, // Corpo da requisição
+      "/api/user/logout",
+      { email },
       {
         headers: {
           Authorization: `Bearer ${token}`,
