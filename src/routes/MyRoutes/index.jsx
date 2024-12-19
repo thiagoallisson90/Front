@@ -60,14 +60,7 @@ const MyRoutes = () => {
           }
         />
 
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/" element={<About />} />
 
         <Route
           path="/projects"
