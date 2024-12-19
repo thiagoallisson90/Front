@@ -16,7 +16,7 @@ function SignupForm() {
 
   const onSubmit = async (dataForm) => {
     try {
-      dataForm["userType"] = "1";
+      dataForm["userType"] = "Member";
 
       const response = await auth(dataForm);
       if (response.ok) {
@@ -27,7 +27,7 @@ function SignupForm() {
 
         localStorage.removeItem("alertShown");
 
-        navigate("/", {
+        navigate("/login", {
           state: {
             ok: "Registration completed successfully!",
           },
@@ -44,7 +44,7 @@ function SignupForm() {
     const hasUpperCase = /[A-Z]/.test(value);
     const hasLowerCase = /[a-z]/.test(value);
     const hasNumber = /[0-9]/.test(value);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    //const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
 
     if (!hasUpperCase) {
       return "Password must have at least one uppercase letter.";
@@ -55,9 +55,12 @@ function SignupForm() {
     if (!hasNumber) {
       return "Password must have at least one number.";
     }
-    if (!hasSpecialChar) {
-      return "Password must have at least one special character.";
+    if (value.length < 8) {
+      return "Password must be at least 8 characters long.";
     }
+    /*if (!hasSpecialChar) {
+      return "Password must have at least one special character.";
+    }*/
 
     return true; // Valid password
   };
