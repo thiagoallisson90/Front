@@ -1,5 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import Footer from "../../components/Footer";
+//import Footer from "../../components/Footer";
 import Layout from "../../components/Layout";
 import Top from "../../components/Top";
 import { siteName } from "../../components/Global";
@@ -70,7 +70,7 @@ const About = () => {
           </div>
         </section>
 
-        <Footer />
+        {/* <Footer /> */}
       </Layout>
     </>
   );
