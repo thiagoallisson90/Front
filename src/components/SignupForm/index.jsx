@@ -19,7 +19,8 @@ function SignupForm() {
       dataForm["userType"] = "Member";
 
       const response = await auth(dataForm);
-      if (response.ok) {
+      //if (response.ok) {
+      if (response.success) {
         resetField("name");
         resetField("email");
         resetField("password");

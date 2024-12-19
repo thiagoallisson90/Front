@@ -12,7 +12,7 @@ const api = axios.create({
   },
 });
 
-const auth = async (dataForm) => {
+/*const auth = async (dataForm) => {
   return await fetch(`${baseUrl}/api/user/signup`, {
     method: "POST",
     headers: {
@@ -20,6 +20,14 @@ const auth = async (dataForm) => {
     },
     body: JSON.stringify(dataForm),
   });
+};*/
+const auth = async (dataForm) => {
+  try {
+    const response = await api.post("/api/user/signup", dataForm);
+    return response.data;
+  } catch (error) {
+    console.error("Erro na requisição:", error.response || error.message);
+  }
 };
 
 /*const login = async (dataForm) => {
