@@ -26,7 +26,7 @@ const auth = async (dataForm) => {
     const response = await api.post("/api/user/signup", dataForm);
     return response.data;
   } catch (error) {
-    console.error("Erro na requisição:", error.response || error.message);
+    return { success: false, message: error.message || error.response };
   }
 };
 
@@ -47,7 +47,7 @@ const login = async (dataForm) => {
     const response = await api.post("/api/user/login", { email, password });
     return response.data;
   } catch (error) {
-    console.error("Erro na requisição:", error.response || error.message);
+    return { ok: false, message: "E-mail or password incorrect!" };
   }
 };
 
