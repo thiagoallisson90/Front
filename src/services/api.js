@@ -1,7 +1,16 @@
+import axios from "axios";
+
 const baseUrl =
   import.meta.env.VITE_REACT_ENV == "development"
     ? import.meta.env.VITE_API_URL_DEV
     : import.meta.env.VITE_API_URL_PROD;
+
+const api = axios.create({
+  baseURL: baseUrl,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 const auth = async (dataForm) => {
   return await fetch(`${baseUrl}/api/user/signup`, {
@@ -25,6 +34,36 @@ const login = async (dataForm) => {
   return await response.json();
 };
 
+/*const logout = async (token) => {
+  return await fetch(`${baseUrl}/api/user/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+    crossorigin: true,
+    mode: "cors",
+    body: JSON.stringify(token),
+  });
+};*/
+
+const logout = async (token, email) => {
+  try {
+    await api.post(
+      "/api/user/logout", // Substitua pelo endpoint desejado
+      { email }, // Corpo da requisição
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    //console.log("Resposta:", response.data);
+  } catch (error) {
+    console.error("Erro na requisição:", error.response || error.message);
+  }
+};
+
 const createSim = async (dataForm) => {
   const response = await fetch(`${baseUrl}/api/simulation`, {
     method: "POST",
@@ -44,16 +83,6 @@ const getSims = async (email, token) => {
   });
 
   return await response.json();
-};
-
-const logout = async (token) => {
-  return await fetch(`${baseUrl}/api/user/logout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(token),
-  });
 };
 
 const refreshToken = async (refresh_token) => {
