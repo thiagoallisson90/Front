@@ -3,7 +3,6 @@ import DataGridP from "../../components/DataGridP";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { siteName } from "../../components/Global";
 import ButtonLogout from "../../components/ButtonLogout";
-import NavItem from "../../components/NavItem";
 import Welcome from "../../components/Welcome/Index";
 
 const Home = () => {
@@ -20,7 +19,7 @@ const Home = () => {
       </HelmetProvider>
 
       <NavBar>
-        <NavItem navigateTo={"/projects"}>Projects</NavItem>
+        {/*<NavItem navigateTo={"/projects"}>Projects</NavItem>*/}
         {/*<NavItem navigateTo={"/profile"}>Profile</NavItem>*/}
         <li>
           <ButtonLogout />
