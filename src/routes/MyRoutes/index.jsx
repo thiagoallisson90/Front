@@ -11,6 +11,7 @@ import Projects from "../../pages/Projects";
 import Profile from "../../pages/Profile";
 import NewProject from "../../pages/NewProject";
 import MyMap from "../../pages/MyMap";
+import Simulation from "../../pages/Simulation";
 
 const MyRoutes = () => {
   return (
@@ -85,6 +86,15 @@ const MyRoutes = () => {
           element={
             <PrivateRoute>
               <NewProject />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/simulation"
+          element={
+            <PrivateRoute>
+              <Simulation />
             </PrivateRoute>
           }
         />

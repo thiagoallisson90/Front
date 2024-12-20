@@ -10,6 +10,7 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { createSim as simulation } from "../../services/api";
 import Welcome from "../../components/Welcome/Index";
 import { getEmail, getToken } from "../../routes/helpers";
+import { useNavigate } from "react-router-dom";
 
 {
   /*function validateCoord(coord) {
@@ -22,6 +23,8 @@ const NewProject = () => {
   const name = "New Project";
   const [projectType, setProjectType] = useState("manual");
   const [step, setStep] = useState(1);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -96,8 +99,17 @@ const NewProject = () => {
       } else if (data.simTime.endsWith("s")) {
         data.simTime = parseInt(data.simTime.replace("s", "")); // Seconds
       }
+
       const response = await simulation(getToken(), getEmail(), data);
-      console.log(response);
+      if (response.success) {
+        navigate("/simulation", {
+          state: {
+            id: response.data,
+            title: data.title,
+            description: data.description,
+          },
+        });
+      }
     }
   };
 
