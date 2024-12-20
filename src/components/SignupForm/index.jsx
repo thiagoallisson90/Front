@@ -91,11 +91,11 @@ function SignupForm() {
                     value: 2,
                     message: "Name must be at least 2 characters long.",
                   },
-                  validate: {
+                  /*validate: {
                     hasSpace: (value) =>
                       value.includes(" ") ||
                       "Name must contain at least one space.",
-                  },
+                  },*/
                 })}
                 className="mt-1 p-1 block w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
