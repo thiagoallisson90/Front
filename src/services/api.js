@@ -69,7 +69,7 @@ const login = async (dataForm) => {
 };*/
 const logout = async (token, email) => {
   try {
-    await api.post(
+    const response = await api.post(
       "/api/user/logout",
       { email },
       {
@@ -78,22 +78,28 @@ const logout = async (token, email) => {
         },
       }
     );
-    //console.log("Resposta:", response.data);
+    return response.data;
   } catch (error) {
-    console.error("Erro na requisição:", error.response || error.message);
+    return { ok: false, message: error.response || error.message };
   }
 };
 
-const createSim = async (dataForm) => {
-  const response = await fetch(`${baseUrl}/api/simulation`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(dataForm),
-  });
-
-  return await response.json();
+const createSim = async (token, email, dataForm) => {
+  try {
+    const response = await api.post(
+      "/api/simulation",
+      { email, data: dataForm },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return { ok: false, message: "Error to the create simulation!" };
+    //console.error("Erro na requisição:", error.response || error.message);
+  }
 };
 
 const getSims = async (email, token) => {

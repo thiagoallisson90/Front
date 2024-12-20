@@ -9,10 +9,13 @@ import { IconButton, Tooltip } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { createSim as simulation } from "../../services/api";
 import Welcome from "../../components/Welcome/Index";
+import { getEmail, getToken } from "../../routes/helpers";
 
-function validateCoord(coord) {
+{
+  /*function validateCoord(coord) {
   const regex = /^\d+(\.\d+)?,\d+(\.\d+)?,\d+(\.\d+)?$/;
   return regex.test(coord);
+}*/
 }
 
 const NewProject = () => {
@@ -29,42 +32,34 @@ const NewProject = () => {
   } = useForm({
     defaultValues: {
       gatewayCount: "1",
-      gatewayCoords: "",
       bandwidth: "868",
       frequency: "125",
       edCount: "1",
-      edCoords: "",
       edClass: "A",
       opMode: "NACK",
+      appType: "",
+      appPayload: "",
       nackPerc: "100",
       ackPerc: "0",
       simArea: "",
       simTime: "",
       title: "",
       description: "",
-      poissonApp: "",
-      uniformApp: "",
-      oneApp: "",
-      registeredApps: "0",
       lossModel: "okumura",
       shadowingModel: "correlated",
     },
   });
 
-  const gatewayCount = watch("gatewayCount");
-  const edCount = watch("edCount");
   const opMode = watch("opMode");
   const nackPerc = watch("nackPerc");
   const ackPerc = watch("ackPerc");
+  const appType = watch("appType");
 
-  const handleNextStep = (data) => {
-    const poissonApp = data["poissonApp"].split(",")[2];
+  const handleNextStep = () => {
+    /*const poissonApp = data["poissonApp"].split(",")[2];
     const uniformApp = data["uniformApp"].split(",")[2];
-    const oneApp = data["uniformApp"].split(",")[2];
+    const oneApp = data["oneApp"].split(",")[2];*/
 
-    if (step === 2) {
-      console.log(poissonApp, uniformApp, oneApp);
-    }
     if (isValid && step < 3) {
       setStep(step + 1);
     }
@@ -78,20 +73,31 @@ const NewProject = () => {
 
   const onSubmit = async (data) => {
     if (isValid) {
-      /*data.gatewayCoords = data.gatewayCoords
-        .split(";")
-        .map((str) => str.trim())
-        .join(";");
+      data.simArea = data.simArea
+        .split(",")
+        .map((dim) => {
+          const trimmed = dim.trim();
+          if (trimmed.endsWith("km")) {
+            return parseFloat(trimmed.replace(/km$/i, "")) * 1000; // km to meters
+          } else if (trimmed.endsWith("m")) {
+            return parseFloat(trimmed.replace(/m$/i, "")); // keep meters
+          }
+          return parseFloat(trimmed);
+        })
+        .join(", ");
 
-      data.edCoords = data.edCoords
-        .split(";")
-        .map((str) => str.trim())
-        .join(";");
-      console.log(data);*/
-      console.log(data);
-      await simulation(data);
-    } else {
-      console.log(errors);
+      // Conversão de simTime para segundos
+      if (data.simTime.endsWith("d")) {
+        data.simTime = parseInt(data.simTime.replace("h", "")) * 3600 * 24; // Days for seconds
+      } else if (data.simTime.endsWith("h")) {
+        data.simTime = parseInt(data.simTime.replace("h", "")) * 3600; // Hours for seconds
+      } else if (data.simTime.endsWith("min")) {
+        data.simTime = parseInt(data.simTime.replace("min", "")) * 60; // Minutes for seconds
+      } else if (data.simTime.endsWith("s")) {
+        data.simTime = parseInt(data.simTime.replace("s", "")); // Seconds
+      }
+      const response = await simulation(getToken(), getEmail(), data);
+      console.log(response);
     }
   };
 
@@ -127,20 +133,6 @@ const NewProject = () => {
               Select Project Type
             </label>
             <div className="flex items-center space-x-4">
-              {/*["manual", "model"].map((type) => (
-                <button
-                  type="button"
-                  key={type}
-                  onClick={() => setProjectType(type)}
-                  className={`px-4 py-2 rounded-lg ${
-                    projectType === type
-                      ? "bg-blue-700 text-white"
-                      : "bg-gray-500 text-white"
-                  }`}
-                >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              ))*/}
               {["manual"].map((type) => (
                 <button
                   type="button"
@@ -218,48 +210,6 @@ const NewProject = () => {
                     </div>
 
                     {/* Gateway Coordinates */}
-                    <div className="mb-6">
-                      <label className="block text-gray-700 mb-2">
-                        {"Gateway's Coordinates (Format: x,y,z; x,y,z; ...)"}
-                        <span className="text-red-600">*</span>
-                      </label>
-                      <div className="relative">
-                        <textarea
-                          {...register("gatewayCoords", {
-                            required: {
-                              value: true,
-                              message: "Fill in the gateway coordinates",
-                            },
-                            validate: (value) => {
-                              const coords = value.split(";");
-
-                              if (coords.length != gatewayCount) {
-                                return `Please enter ${gatewayCount} coordinates!`;
-                              }
-
-                              for (const coord of coords) {
-                                if (!validateCoord(coord.trim())) {
-                                  return `Please enter valid coordinates`;
-                                }
-                              }
-
-                              return true;
-                            },
-                          })}
-                          placeholder="Enter coordinates (e.g., 1.2,3.4,5.6; 7.8,9.0,1.1)"
-                          className="block w-full border border-inherit rounded-lg p-2"
-                          rows={gatewayCount}
-                        />
-                        <span className="absolute text-xs text-gray-500 right-2 bottom-2">
-                          x and y coordinates plus z (height)
-                        </span>
-                      </div>
-                      {errors?.gatewayCoords && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.gatewayCoords.message}
-                        </p>
-                      )}
-                    </div>
                   </div>
 
                   {/* Bandwidth and Frequency */}
@@ -356,48 +306,6 @@ const NewProject = () => {
                     </div>
 
                     {/* ED's Coordinates */}
-                    <div className="mb-6">
-                      <label className="block text-gray-700 mb-2">
-                        {`ED's Coordinates (Format: x,y,z; x,y,z; ...)`}
-                        <span className="text-red-600">*</span>
-                      </label>
-                      <div className="relative">
-                        <textarea
-                          {...register("edCoords", {
-                            required: {
-                              value: true,
-                              message: "Fill in the ED's coordinates",
-                            },
-                            validate: (value) => {
-                              const coords = value.split(";");
-
-                              if (coords.length != edCount) {
-                                return `Please enter ${edCount} coordinates!`;
-                              }
-
-                              for (const coord of coords) {
-                                if (!validateCoord(coord.trim())) {
-                                  return `Please enter valid coordinates`;
-                                }
-                              }
-
-                              return true;
-                            },
-                          })}
-                          placeholder="Enter coordinates (e.g., 1.2,3.4,5.6; 7.8,9.0,1.1)"
-                          className="block w-full border border-inherit rounded-lg p-2"
-                          rows={edCount}
-                        />
-                        <span className="absolute text-xs text-gray-500 right-2 bottom-2">
-                          x and y coordinates plus z (height)
-                        </span>
-                      </div>
-                      {errors?.edCoords && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.edCoords.message}
-                        </p>
-                      )}
-                    </div>
                   </div>
 
                   {/* ED's Classes */}
@@ -452,7 +360,9 @@ const NewProject = () => {
                         })}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                       />
-                      <span className="text-gray-700">NACK</span>
+                      <span className="text-gray-700">
+                        NACK (Negative Acknowledgement)
+                      </span>
                     </label>
 
                     {/* ACK */}
@@ -474,7 +384,9 @@ const NewProject = () => {
                         })}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                       />
-                      <span className="text-gray-700">ACK</span>
+                      <span className="text-gray-700">
+                        ACK (Acknowledgement)
+                      </span>
                     </label>
 
                     {/* Mixed */}
@@ -485,7 +397,9 @@ const NewProject = () => {
                         {...register("opMode", { required: true })}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                       />
-                      <span className="text-gray-700">Mixed</span>
+                      <span className="text-gray-700">
+                        Mixed (NACK and ACK)
+                      </span>
                     </label>
                   </div>
 
@@ -525,100 +439,98 @@ const NewProject = () => {
                     </>
                   )}
 
-                  {/* Tx. Avg. Rate - Poisson */}
+                  {/* Applications */}
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-2">
-                      Choose the types of application to be tested
+                      Choose the types of application: Poisson, OneShot or
+                      Uniform
                       <span className="text-red-600">*</span>
                     </label>
 
                     <div className="mb-4">
-                      <label className="block text-gray-700 mb-2">
-                        {`Poisson Application (Format: Tx, Payload, % of EDs, and Delay)`}
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          value="poisson"
+                          {...register("appType", {
+                            required: true,
+                          })}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                        />
+                        <span className="text-gray-700">Poisson</span>
+                      </label>
 
-                        <Tooltip
-                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
-                          placement="right"
-                          arrow
-                        >
-                          <IconButton className="text-blue-500">
-                            <HelpOutlineIcon />
-                          </IconButton>
-                        </Tooltip>
+                      {/**/}
+
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          value="one"
+                          {...register("appType", {
+                            required: true,
+                          })}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                        />
+                        <span className="text-gray-700">
+                          OneShot (Each app send only one message)
+                        </span>
                       </label>
 
                       <label className="flex items-center space-x-2">
                         <input
-                          type="text"
-                          name="poissonApp"
-                          id="poissonApp"
-                          placeholder="5pkt/h, 50B, 50%, 1min"
-                          {...register("poissonApp")}
-                          className="block w-full border rounded-lg p-2"
+                          type="radio"
+                          value="uniform"
+                          {...register("appType", {
+                            required: true,
+                          })}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
                         />
+                        <span className="text-gray-700">Uniform</span>
                       </label>
                     </div>
                   </div>
 
-                  {/* Tx. Avg. Rate - Uniform */}
-                  <div className="mb-4">
-                    <div className="mb-4">
-                      <label className="block text-gray-700 mb-2">
-                        {`Uniform Application (Format: Tx, Payload, % of EDs, and Delay)`}
+                  {appType != "" && (
+                    <>
+                      <div className="mb-4">
+                        <label className="block text-gray-700 mb-2">
+                          {`Payload Size`}
 
-                        <Tooltip
-                          title="Provide the transmission average rate with the unit: e.g. 1pkt/s, 2pkt/min, or 4pkt/h. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
-                          placement="right"
-                          arrow
-                        >
-                          <IconButton className="text-blue-500">
-                            <HelpOutlineIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </label>
+                          <Tooltip
+                            title="Provide the the payload size of the packets in bytes (B) with the unit: e.g. 20."
+                            placement="right"
+                            arrow
+                          >
+                            <IconButton className="text-blue-500">
+                              <HelpOutlineIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </label>
 
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          name="uniformApp"
-                          id="uniformApp"
-                          placeholder="5pkt/h, 50B, 40%, 1min"
-                          {...register("uniformApp")}
-                          className="block w-full border rounded-lg p-2"
-                        />
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Tx. Avg. Rate - One Shot */}
-                  <div className="mb-4">
-                    <div className="mb-4">
-                      <label className="block text-gray-700 mb-2">
-                        {`One Shot Application (Format: Payload, % of EDs, and Delay)`}
-
-                        <Tooltip
-                          title="One Shot sends a single packet. The payload size in bytes (B) with the unit: e.g. 20B. % of EDs: e.g. 30%. Allowed maximum delay with the unit: e.g. 1s, 1min, 1h, 1d."
-                          placement="right"
-                          arrow
-                        >
-                          <IconButton className="text-blue-500">
-                            <HelpOutlineIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </label>
-
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="text"
-                          name="oneApp"
-                          id="oneApp"
-                          placeholder="5pkt/h, 50B, 10%, 1min"
-                          {...register("oneApp")}
-                          className="block w-full border rounded-lg p-2"
-                        />
-                      </label>
-                    </div>
-                  </div>
+                        <label className="flex items-center space-x-2">
+                          <input
+                            {...register("appPayload", {
+                              required: {
+                                value: true,
+                                message:
+                                  "Enter the payload size of the packets!",
+                              },
+                              onChange: (e) => {
+                                e.target.value =
+                                  parseInt(e.target.value) <= 0
+                                    ? 1
+                                    : e.target.value;
+                              },
+                            })}
+                            type="number"
+                            className="block w-full border rounded-lg p-2"
+                            placeholder="50"
+                            min="1"
+                          />
+                        </label>
+                      </div>
+                    </>
+                  )}
 
                   <div className="flex justify-between mt-6">
                     <button
@@ -676,10 +588,28 @@ const NewProject = () => {
                           value: true,
                           message: "Simulation Area is required!",
                         },
+                        pattern: {
+                          value:
+                            /^(\d+(?:\.\d+)?(m|km))\s*,\s*(\d+(?:\.\d+)?(m|km))$/,
+                          message: "Invalid format! Use Xm, Ym or Xkm, Ykm",
+                        },
+                        validate: {
+                          positiveNumbers: (value) => {
+                            const matches = value.match(
+                              /^(\d+(?:\.\d+)?)(m|km)\s*,\s*(\d+(?:\.\d+)?)(m|km)$/
+                            );
+                            if (!matches) return true; // Se não passar no regex, será tratado pela validação do padrão
+                            const [_, x, xUnit, y, yUnit] = matches;
+                            return Number(x) > 0 && Number(y) > 0
+                              ? true
+                              : "Dimensions must be greater than 0!";
+                          },
+                        },
                       })}
                       className="block w-full border rounded-lg p-2"
                     />
                   </label>
+
                   {errors?.simArea && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.simArea?.message}
@@ -713,6 +643,20 @@ const NewProject = () => {
                         required: {
                           value: true,
                           message: "Simulation Time is required!",
+                        },
+                        pattern: {
+                          value: /^\d+(s|min|h|d)$/,
+                          message: "Invalid format! Use Xs, Xmin, Xh, or Xd",
+                        },
+                        validate: {
+                          positiveNumber: (value) => {
+                            const matches = value.match(/^(\d+)(s|min|h|d)$/);
+                            if (!matches) return true; // Already handled by pattern validation
+                            const [_, number] = matches;
+                            return Number(number) > 0
+                              ? true
+                              : "Time must be greater than 0!";
+                          },
                         },
                       })}
                       className="block w-full border rounded-lg p-2"
