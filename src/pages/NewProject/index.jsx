@@ -41,10 +41,10 @@ const NewProject = () => {
       edClass: "A",
       opMode: "NACK",
       appType: "",
-      appPayload: "",
+      appPayload: "50",
       nackPerc: "100",
       ackPerc: "0",
-      simArea: "",
+      radius: "",
       simTime: "",
       title: "",
       description: "",
@@ -76,7 +76,7 @@ const NewProject = () => {
 
   const onSubmit = async (data) => {
     if (isValid) {
-      data.simArea = data.simArea
+      data.radius = data.radius
         .split(",")
         .map((dim) => {
           const trimmed = dim.trim();
@@ -534,7 +534,7 @@ const NewProject = () => {
                                     : e.target.value;
                               },
                             })}
-                            type="number"
+                            type="hidden"
                             className="block w-full border rounded-lg p-2"
                             placeholder="50"
                             min="1"
@@ -575,11 +575,11 @@ const NewProject = () => {
 
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">
-                    {`Simulation Area (Format: x-dimension (m or km) and y-dimension (m or km))`}
+                    {`Simulation radius (Format: dimension in meters os kilometers (m or km))`}
                     <span className="text-red-600">*</span>
 
                     <Tooltip
-                      title="Provide the dimensions with the unit: e.g. 1000m, 1000m; or 2km, 2km."
+                      title="Provide the dimension with the unit: e.g. 1000m, or 1km."
                       placement="right"
                       arrow
                     >
@@ -592,29 +592,39 @@ const NewProject = () => {
                   <label className="flex items-center space-x-2">
                     <input
                       type="text"
-                      name="simArea"
-                      id="simArea"
-                      placeholder="x-dimension, y-dimension (e.g. 1000m, 1000m; or 5km, 5km)"
-                      {...register("simArea", {
+                      name="radius"
+                      id="radius"
+                      placeholder="Radius in m ok km (e.g. 1000m, or 1km)"
+                      {...register("radius", {
                         required: {
                           value: true,
-                          message: "Simulation Area is required!",
+                          message: "Simulation radius is required!",
                         },
                         pattern: {
-                          value:
-                            /^(\d+(?:\.\d+)?(m|km))\s*,\s*(\d+(?:\.\d+)?(m|km))$/,
-                          message: "Invalid format! Use Xm, Ym or Xkm, Ykm",
+                          value: /^\d+(\.\d+)?(m|km)$/,
+                          message:
+                            "Invalid format! Use Xm, Xkm, and X is positive.",
                         },
                         validate: {
                           positiveNumbers: (value) => {
-                            const matches = value.match(
-                              /^(\d+(?:\.\d+)?)(m|km)\s*,\s*(\d+(?:\.\d+)?)(m|km)$/
-                            );
-                            if (!matches) return true; // Se não passar no regex, será tratado pela validação do padrão
-                            const [_, x, xUnit, y, yUnit] = matches;
-                            return Number(x) > 0 && Number(y) > 0
-                              ? true
-                              : "Dimensions must be greater than 0!";
+                            const matches = value.match(/^\d+(\.\d+)?(m|km)$/);
+
+                            // Se não passar no regex, retorna uma mensagem de erro
+                            if (!matches) {
+                              return "Invalid format. The value should be in the format Xm or Xkm.";
+                            }
+
+                            const [fullMatch, _, unit] = matches; // Desestruturação para pegar apenas o número
+                            const parsedNumber = parseFloat(fullMatch);
+
+                            console.log(parsedNumber, unit);
+
+                            // Verifica se o número é positivo
+                            if (parsedNumber > 0) {
+                              return true; // Valor válido
+                            } else {
+                              return "Dimension must be greater than 0!"; // Se o número não for maior que 0
+                            }
                           },
                         },
                       })}
@@ -622,9 +632,9 @@ const NewProject = () => {
                     />
                   </label>
 
-                  {errors?.simArea && (
+                  {errors?.radius && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.simArea?.message}
+                      {errors.radius?.message}
                     </p>
                   )}
                 </div>
