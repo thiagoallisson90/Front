@@ -124,7 +124,7 @@ const NewProject = () => {
       </HelmetProvider>
 
       <NavBar>
-        <NavItem navigateTo={"/projects"}>Projects</NavItem>
+        {/*<NavItem navigateTo={"/projects"}>Projects</NavItem>*/}
         {/*<NavItem navigateTo={"/profile"}>Profile</NavItem>*/}
         <li>
           <ButtonLogout />

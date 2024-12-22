@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl =
+export const baseUrl =
   import.meta.env.VITE_REACT_ENV == "development"
     ? import.meta.env.VITE_API_URL_DEV
     : import.meta.env.VITE_API_URL_PROD;
