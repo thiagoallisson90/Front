@@ -128,4 +128,24 @@ const refreshToken = async (refresh_token) => {
   return await response.json();
 };
 
-export { auth, login, logout, createSim, getSims, refreshToken };
+const runSim = async (token, id) => {
+  try {
+    const response = await api.put(
+      `/api/simulation/run/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return {
+      ok: false,
+      message: error.response || error.message,
+    };
+  }
+};
+
+export { auth, login, logout, createSim, getSims, refreshToken, runSim };

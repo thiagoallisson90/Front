@@ -4,17 +4,31 @@ import NavBar from "../../components/NavBar";
 import NavItem from "../../components/NavItem";
 import ButtonLogout from "../../components/ButtonLogout";
 import Welcome from "../../components/Welcome/Index";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { runSim } from "../../services/api";
+import { getToken } from "../../routes/helpers";
 
 const Simulation = () => {
   const name = "Simulation";
   const location = useLocation();
+  const [data, setData] = useState("");
+  const [imgs, setImgs] = useState("");
 
   const { id, title, description } = location.state;
 
   useEffect(() => {
-    console.log(id || "Without id");
+    //console.log(id || "Without id");
+
+    const handleRunSim = async () => {
+      const response = await runSim(getToken(), id);
+      if (response.success) {
+        setData(response.data[0]);
+        setImgs(response.data[1]);
+      }
+    };
+
+    handleRunSim();
   });
 
   return (
@@ -51,6 +65,12 @@ const Simulation = () => {
             </div>
           </div>
         </div>
+
+        {data && (
+          <>
+            <p>Oi</p>
+          </>
+        )}
       </main>
     </>
   );

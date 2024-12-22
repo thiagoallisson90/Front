@@ -502,7 +502,7 @@ const NewProject = () => {
                     </div>
                   </div>
 
-                  {appType != "" && (
+                  {/*appType != "" && (
                     <>
                       <div className="mb-4">
                         <label className="block text-gray-700 mb-2">
@@ -542,7 +542,7 @@ const NewProject = () => {
                         </label>
                       </div>
                     </>
-                  )}
+                  )*/}
 
                   <div className="flex justify-between mt-6">
                     <button
@@ -617,7 +617,7 @@ const NewProject = () => {
                             const [fullMatch, _, unit] = matches; // Desestruturação para pegar apenas o número
                             const parsedNumber = parseFloat(fullMatch);
 
-                            console.log(parsedNumber, unit);
+                            //console.log(parsedNumber, unit);
 
                             // Verifica se o número é positivo
                             if (parsedNumber > 0) {
